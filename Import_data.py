@@ -1,6 +1,7 @@
 import csv
 import mysql.connector
 
+
 def create_connection():
     # Adjust the connection details accordingly
     connection = mysql.connector.connect(
@@ -10,6 +11,7 @@ def create_connection():
         database='BoardgameData'
     )
     return connection
+
 
 def create_schema(file_name):
     with open(file_name, 'r') as file:
@@ -23,6 +25,7 @@ def create_schema(file_name):
         else:
             print("Failed creating schema: {}".format(error_descriptor))
         exit(1)
+
 
 def import_game_data(file_name, cursor, connection):
     with open(file_name, 'r') as csv_file:
@@ -39,9 +42,11 @@ def import_game_data(file_name, cursor, connection):
                 row['min_players'], row['max_players'], row['min_play_time'],
                 row['max_play_time']
             )
-        cursor.executemany("INSERT INTO Games VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", list(games.values()))
+        cursor.executemany(
+            "INSERT INTO Games VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s)", list(games.values()))
 
         connection.commit()
+
 
 def import_artist_data(file_name, cursor, connection):
     with open(file_name, 'r') as csv_file:
@@ -55,9 +60,11 @@ def import_artist_data(file_name, cursor, connection):
             artists[row['artist_id']] = (
                 row['artist_id'], row['artists']
             )
-        cursor.executemany("INSERT INTO Artists VALUES (%s, %s)", list(artists.values()))
+        cursor.executemany(
+            "INSERT INTO Artists VALUES (%s, %s)", list(artists.values()))
 
         connection.commit()
+
 
 def import_designer_data(file_name, cursor, connection):
     with open(file_name, 'r') as csv_file:
@@ -71,9 +78,11 @@ def import_designer_data(file_name, cursor, connection):
             designers[row['designer_id']] = (
                 row['designer_id'], row['designers']
             )
-        cursor.executemany("INSERT INTO Designers VALUES (%s, %s)", list(designers.values()))
-        
+        cursor.executemany(
+            "INSERT INTO Designers VALUES (%s, %s)", list(designers.values()))
+
         connection.commit()
+
 
 def import_category_data(file_name, cursor, connection):
     with open(file_name, 'r') as csv_file:
@@ -87,9 +96,11 @@ def import_category_data(file_name, cursor, connection):
             designers[row['category_id']] = (
                 row['category_id'], row['categories']
             )
-        cursor.executemany("INSERT INTO Categories VALUES (%s, %s)", list(categories.values()))
-        
+        cursor.executemany(
+            "INSERT INTO Categories VALUES (%s, %s)", list(categories.values()))
+
         connection.commit()
+
 
 def import_mechanic_data(file_name, cursor, connection):
     with open(file_name, 'r') as csv_file:
@@ -103,9 +114,11 @@ def import_mechanic_data(file_name, cursor, connection):
             mechanics[row['mechanic_id']] = (
                 row['mechanic_id'], row['mechanics']
             )
-        cursor.executemany("INSERT INTO Mechanics VALUES (%s, %s)", list(mechanics.values()))
-        
+        cursor.executemany(
+            "INSERT INTO Mechanics VALUES (%s, %s)", list(mechanics.values()))
+
         connection.commit()
+
 
 def import_publisher_data(file_name, cursor, connection):
     with open(file_name, 'r') as csv_file:
@@ -119,11 +132,13 @@ def import_publisher_data(file_name, cursor, connection):
             designers[row['publisher_id']] = (
                 row['publisher_id'], row['publishers']
             )
-        cursor.executemany("INSERT INTO Publishers VALUES (%s, %s)", list(publishers.values()))
-        
+        cursor.executemany(
+            "INSERT INTO Publishers VALUES (%s, %s)", list(publishers.values()))
+
         connection.commit()
 
-def import_paint_data(file_name, cursor, connection):
+
+def import_painted_data(file_name, cursor, connection):
     with open(file_name, 'r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
 
@@ -135,11 +150,13 @@ def import_paint_data(file_name, cursor, connection):
             paint[row['artist_id'], row['game_id']] = (
                 row['artist_id'], row['game_id']
             )
-        cursor.executemany("INSERT INTO Paints VALUES (%s, %s)", list(paint.values()))
-        
+        cursor.executemany(
+            "INSERT INTO Paints VALUES (%s, %s)", list(paint.values()))
+
         connection.commit()
 
-def import_design_data(file_name, cursor, connection):
+
+def import_designed_data(file_name, cursor, connection):
     with open(file_name, 'r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
 
@@ -151,11 +168,13 @@ def import_design_data(file_name, cursor, connection):
             design[row['designer_id'], row['game_id']] = (
                 row['designer_id'], row['game_id']
             )
-        cursor.executemany("INSERT INTO Designs VALUES (%s, %s)", list(design.values()))
-        
+        cursor.executemany(
+            "INSERT INTO Designs VALUES (%s, %s)", list(design.values()))
+
         connection.commit()
 
-def import_catagorize_data(file_name, cursor, connection):
+
+def import_catagorized_data(file_name, cursor, connection):
     with open(file_name, 'r') as csv_file:
         csv_reader = csv.DictReader(csv_file)
 
@@ -167,9 +186,11 @@ def import_catagorize_data(file_name, cursor, connection):
             catagorize[row['category_id'], row['game_id']] = (
                 row['category_id'], row['game_id']
             )
-        cursor.executemany("INSERT INTO Categorizes VALUES (%s, %s)", list(category.values()))
-        
+        cursor.executemany(
+            "INSERT INTO Categorizes VALUES (%s, %s)", list(category.values()))
+
         connection.commit()
+
 
 def import_have_data(file_name, cursor, connection):
     with open(file_name, 'r') as csv_file:
@@ -183,9 +204,11 @@ def import_have_data(file_name, cursor, connection):
             mechanic[row['mechanic_id'], row['game_id']] = (
                 row['mechanic_id'], row['game_id']
             )
-        cursor.executemany("INSERT INTO HaveMechanic VALUES (%s, %s)", list(mechanic.values()))
-        
+        cursor.executemany(
+            "INSERT INTO HaveMechanic VALUES (%s, %s)", list(mechanic.values()))
+
         connection.commit()
+
 
 def import_publish_data(file_name, cursor, connection):
     with open(file_name, 'r') as csv_file:
@@ -199,10 +222,11 @@ def import_publish_data(file_name, cursor, connection):
             publish[row['publisher_id'], row['game_id']] = (
                 row['publisher_id'], row['game_id']
             )
-        cursor.executemany("INSERT INTO Publishes VALUES (%s, %s)", list(publish.values()))
-        
+        cursor.executemany(
+            "INSERT INTO Publishes VALUES (%s, %s)", list(publish.values()))
+
         connection.commit()
-        
+
 
 if __name__ == "__main__":
     connection = create_connection()
