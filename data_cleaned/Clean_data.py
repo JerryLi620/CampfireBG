@@ -14,7 +14,7 @@ def get_target_type(file_name):
                 csv_writer.writerow(row)
 
 
-def add_id(file_name, item, ID):
+def add_id(file_name, item, game_set, ID):
     content = list(csv.DictReader(open(file_name)))
 
     items = {}
@@ -23,15 +23,16 @@ def add_id(file_name, item, ID):
     for row in content:
         data = row[item]
 
-        if data == '0' or data == 'nan':
-            row[item] = 'null'
-            row[ID] = 'null'
-        elif data in items:
-            row[ID] = items[data]
-        else:
-            row[ID] = count
-            items[data] = count
-            count += 1
+        if row['game_id'] in game_set:
+            if data == '0' or data == 'nan':
+                row[item] = 'null'
+                row[ID] = 'null'
+            elif data in items:
+                row[ID] = items[data]
+            else:
+                row[ID] = count
+                items[data] = count
+                count += 1
 
     fieldnames = content[0].keys() if content else []
     with open(file_name, 'w', newline='') as file:
@@ -60,15 +61,24 @@ def clean_nan(file_name):
 
 
 if __name__ == "__main__":
-    clean_nan('data_cleaned/games.csv')
-    # add_id('data_cleaned/categorized.csv', 'categories', 'category_ID')
-    clean_nan('data_cleaned/categorized.csv')
-    # add_id('data_cleaned/designed.csv', 'designers', 'designer_ID')
-    clean_nan('data_cleaned/designed.csv')
-    # add_id('data_cleaned/moves.csv', 'mechanics', 'mechanism_ID')
-    clean_nan('data_cleaned/moves.csv')
-    # add_id('data_cleaned/painted.csv', 'artists', 'artist')
-    clean_nan('data_cleaned/painted.csv')
-    # add_id('data_cleaned/published.csv', 'publishers', 'publisher_ID')
-    clean_nan('data_cleaned/published.csv')
     get_target_type('data_cleaned/games.csv')
+
+    with open('data_cleaned/games.csv', 'r') as file:
+        content = list(csv.DictReader(file))
+        game_set = set()
+        for row in content:
+            game_set.add(row['game_id'])
+
+    clean_nan('data_cleaned/games.csv')
+    add_id('data_cleaned/categorized.csv',
+           'categories', game_set, 'category_ID')
+    clean_nan('data_cleaned/categorized.csv')
+    add_id('data_cleaned/designed.csv', 'designers', game_set, 'designer_ID')
+    clean_nan('data_cleaned/designed.csv')
+    add_id('data_cleaned/moves.csv', 'mechanics', game_set, 'mechanism_ID')
+    clean_nan('data_cleaned/moves.csv')
+    add_id('data_cleaned/painted.csv', 'artists', game_set, 'artist')
+    clean_nan('data_cleaned/painted.csv')
+    add_id('data_cleaned/published.csv',
+           'publishers', game_set, 'publisher_ID')
+    clean_nan('data_cleaned/published.csv')
