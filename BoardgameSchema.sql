@@ -16,11 +16,11 @@ DROP TABLE IF EXISTS Publishes;
 
 CREATE TABLE Games(
     GameID VARCHAR(10),
-    GameName VARCHAR(100),
+    GameName VARCHAR(300),
     GameType VARCHAR(30),
     Rating FLOAT NULL,
     Complexity FLOAT NULL,
-    YearPub VARCHAR(4),
+    YearPub VARCHAR(10),
     MinPlayer INT NULL, 
     MaxPlayer INT NULL, 
     MinTime INT NULL, 
@@ -28,33 +28,41 @@ CREATE TABLE Games(
     PRIMARY KEY (GameID)
 );
 
+CREATE INDEX idx_rating ON Games (Rating);
+CREATE INDEX idx_complexity ON Games (Complexity);
+CREATE INDEX idx_minPlayer ON Games (MinPlayer);
+CREATE INDEX idx_maxPlayer ON Games (MaxPlayer);
+CREATE INDEX idx_minTime ON Games (MinTime);
+CREATE INDEX idx_maxTime ON Games (MaxTime);
+
+
 CREATE TABLE Designers(
     DesignerID VARCHAR(10),
-    DesignerName VARCHAR(50),
+    DesignerName VARCHAR(200),
     PRIMARY KEY (DesignerID)
 );
 
 CREATE TABLE Artists(
     ArtistID VARCHAR(10),
-    ArtistName VARCHAR(50),
+    ArtistName VARCHAR(200),
     PRIMARY KEY (ArtistID)    
 );
 
 CREATE TABLE Categories(
     CategoryID VARCHAR(10), 
-    CategoryName VARCHAR(50),
+    CategoryName VARCHAR(200),
     PRIMARY KEY (CategoryID)
 );
 
 CREATE TABLE Mechanics(
     MechanicID VARCHAR(10), 
-    MechanicName VARCHAR(50),
+    MechanicName VARCHAR(200),
     PRIMARY KEY (MechanicID)
 );
 
 CREATE TABLE Publishers(
     PublisherID VARCHAR(10), 
-    PublisherName VARCHAR(50),
+    PublisherName VARCHAR(200),
     PRIMARY KEY (PublisherID)
 );
 
