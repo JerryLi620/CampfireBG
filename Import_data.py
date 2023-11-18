@@ -57,8 +57,8 @@ def import_artist_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            artists[row['artist_id']] = (
-                row['artist_id'], row['artists']
+            artists[row['artists_id']] = (
+                row['artists_id'], row['artists']
             )
         cursor.executemany(
             "INSERT INTO Artists VALUES (%s, %s)", list(artists.values()))
@@ -75,8 +75,8 @@ def import_designer_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            designers[row['designer_id']] = (
-                row['designer_id'], row['designers']
+            designers[row['designers_ID']] = (
+                row['designers_ID'], row['designers']
             )
         cursor.executemany(
             "INSERT INTO Designers VALUES (%s, %s)", list(designers.values()))
@@ -93,8 +93,8 @@ def import_category_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            designers[row['category_id']] = (
-                row['category_id'], row['categories']
+            categories[row['category_ID']] = (
+                row['category_ID'], row['categories']
             )
         cursor.executemany(
             "INSERT INTO Categories VALUES (%s, %s)", list(categories.values()))
@@ -111,8 +111,8 @@ def import_mechanic_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            mechanics[row['mechanic_id']] = (
-                row['mechanic_id'], row['mechanics']
+            mechanics[row['mechanism_ID']] = (
+                row['mechanism_ID'], row['mechanics']
             )
         cursor.executemany(
             "INSERT INTO Mechanics VALUES (%s, %s)", list(mechanics.values()))
@@ -129,8 +129,8 @@ def import_publisher_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            designers[row['publisher_id']] = (
-                row['publisher_id'], row['publishers']
+            publishers[row['publisher_ID']] = (
+                row['publisher_ID'], row['publishers']
             )
         cursor.executemany(
             "INSERT INTO Publishers VALUES (%s, %s)", list(publishers.values()))
@@ -147,8 +147,8 @@ def import_painted_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            paint[row['artist_id'], row['game_id']] = (
-                row['artist_id'], row['game_id']
+            paint[row['artists_id'], row['game_id']] = (
+                row['artists_id'], row['game_id']
             )
         cursor.executemany(
             "INSERT INTO Paints VALUES (%s, %s)", list(paint.values()))
@@ -165,8 +165,8 @@ def import_designed_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            design[row['designer_id'], row['game_id']] = (
-                row['designer_id'], row['game_id']
+            design[row['designers_ID'], row['game_id']] = (
+                row['designers_ID'], row['game_id']
             )
         cursor.executemany(
             "INSERT INTO Designs VALUES (%s, %s)", list(design.values()))
@@ -183,11 +183,11 @@ def import_catagorized_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            catagorize[row['category_id'], row['game_id']] = (
-                row['category_id'], row['game_id']
+            catagorize[row['category_ID'], row['game_id']] = (
+                row['category_ID'], row['game_id']
             )
         cursor.executemany(
-            "INSERT INTO Categorizes VALUES (%s, %s)", list(category.values()))
+            "INSERT INTO Categorizes VALUES (%s, %s)", list(catagorize.values()))
 
         connection.commit()
 
@@ -201,8 +201,8 @@ def import_have_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            mechanic[row['mechanic_id'], row['game_id']] = (
-                row['mechanic_id'], row['game_id']
+            mechanic[row['mechanism_ID'], row['game_id']] = (
+                row['mechanism_ID'], row['game_id']
             )
         cursor.executemany(
             "INSERT INTO HaveMechanic VALUES (%s, %s)", list(mechanic.values()))
@@ -219,8 +219,8 @@ def import_publish_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            publish[row['publisher_id'], row['game_id']] = (
-                row['publisher_id'], row['game_id']
+            publish[row['publisher_ID'], row['game_id']] = (
+                row['publisher_ID'], row['game_id']
             )
         cursor.executemany(
             "INSERT INTO Publishes VALUES (%s, %s)", list(publish.values()))
@@ -232,18 +232,20 @@ if __name__ == "__main__":
     connection = create_connection()
     cursor = connection.cursor()
     create_schema('BoardGameSchema.sql')
+    print("Successfully create schema.")
 
-    import_game_data('data/items.csv')
-    import_artist_data('data/artists.csv')
-    import_designer_data('data/designers.csv')
-    import_category_data('data/categories.csv')
-    import_mechanic_data('data/mechanics.csv')
-    import_publisher_data('data/publishers.csv')
-    import_paint_data('data/artists.csv')
-    import_design_data('data/designers.csv')
-    import_categorize_data('data/categories.csv')
-    import_have_data('data/mechanics.csv')
-    import_publish_data('data/publishers.csv')
+    import_game_data('data_cleaned/games.csv',cursor, connection)
+    import_artist_data('data_cleaned/painted.csv',cursor, connection)
+    import_designer_data('data_cleaned/designed.csv',cursor, connection)
+    import_category_data('data_cleaned/categorized.csv',cursor, connection)
+    import_mechanic_data('data_cleaned/moves.csv',cursor, connection)
+    import_publisher_data('data_cleaned/published.csv',cursor, connection)
+    import_painted_data('data_cleaned/painted.csv',cursor, connection)
+    import_designed_data('data_cleaned/designed.csv',cursor, connection)
+    import_catagorized_data('data_cleaned/categorized.csv',cursor, connection)
+    import_have_data('data_cleaned/moves.csv',cursor, connection)
+    import_publish_data('data_cleaned/published.csv',cursor, connection)
+    print("Successfully import data.")
 
     cursor.close()
     connection.close()
