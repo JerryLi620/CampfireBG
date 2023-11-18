@@ -57,8 +57,8 @@ def import_artist_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            artists[row['artists_id']] = (
-                row['artists_id'], row['artists']
+            artists[row['artist_ID']] = (
+                row['artist_ID'], row['artists']
             )
         cursor.executemany(
             "INSERT INTO Artists VALUES (%s, %s)", list(artists.values()))
@@ -75,8 +75,8 @@ def import_designer_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            designers[row['designers_ID']] = (
-                row['designers_ID'], row['designers']
+            designers[row['designer_ID']] = (
+                row['designer_ID'], row['designers']
             )
         cursor.executemany(
             "INSERT INTO Designers VALUES (%s, %s)", list(designers.values()))
@@ -147,8 +147,8 @@ def import_painted_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            paint[row['artists_id'], row['game_id']] = (
-                row['artists_id'], row['game_id']
+            paint[row['artist_ID'], row['game_id']] = (
+                row['artist_ID'], row['game_id']
             )
         cursor.executemany(
             "INSERT INTO Paints VALUES (%s, %s)", list(paint.values()))
@@ -165,8 +165,8 @@ def import_designed_data(file_name, cursor, connection):
         for row in csv_reader:
             row = {k: None if v == '' else v for k, v in row.items()}
 
-            design[row['designers_ID'], row['game_id']] = (
-                row['designers_ID'], row['game_id']
+            design[row['designer_ID'], row['game_id']] = (
+                row['designer_ID'], row['game_id']
             )
         cursor.executemany(
             "INSERT INTO Designs VALUES (%s, %s)", list(design.values()))
