@@ -77,7 +77,7 @@ if __name__ == "__main__":
     clean_nan('data_cleaned/designed.csv')
     add_id('data_cleaned/moves.csv', 'mechanics', game_set, 'mechanism_ID')
     clean_nan('data_cleaned/moves.csv')
-    add_id('data_cleaned/painted.csv', 'artists', game_set, 'artist')
+    add_id('data_cleaned/painted.csv', 'artists', game_set, 'artist_ID')
     clean_nan('data_cleaned/painted.csv')
     add_id('data_cleaned/published.csv',
            'publishers', game_set, 'publisher_ID')
