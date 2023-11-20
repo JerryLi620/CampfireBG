@@ -15,30 +15,34 @@ def get_target_type(file_name):
 
 
 def add_id(file_name, item, game_set, ID):
-    content = list(csv.DictReader(open(file_name)))
-
+    # Read the file content into a list of dictionaries
+    with open(file_name, 'r', newline='') as file:
+        content = list(csv.DictReader(file))
+    
     items = {}
     count = 1
+    new_content = [] 
 
     for row in content:
         data = row[item]
-
+        
         if row['game_id'] in game_set:
-            if data == '0' or data == 'nan':
-                row[item] = 'null'
-                row[ID] = 'null'
+            if data.lower() == 'null':
+                continue
             elif data in items:
                 row[ID] = items[data]
             else:
                 row[ID] = count
                 items[data] = count
                 count += 1
+            new_content.append(row) 
 
-    fieldnames = content[0].keys() if content else []
+    fieldnames = new_content[0].keys() if new_content else []
+
     with open(file_name, 'w', newline='') as file:
-        csv_writer = csv.DictWriter(file, fieldnames=fieldnames)
-        csv_writer.writeheader()
-        csv_writer.writerows(content)
+        writer = csv.DictWriter(file, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(new_content)
 
 
 def clean_nan(file_name):

@@ -1,5 +1,1 @@
-data_cleaned/categorized.csv
-data_cleaned/published.csv
-data_cleaned/designed.csv
-data_cleaned/painted.csv
-data_cleaned/moves.csv
+*.csv
