@@ -13,27 +13,10 @@ db.connect();
 
 app.use(express.static("."));
 
-app.get("/player", function (request, response) {
-  db.queryPlayerByName(request.query.name, (results) => {
+app.get("/games", function (request, response) {
+  db.queryGames(request.query, (results) => {
     response.json(results);
   });
-});
-
-app.get("/tournaments", function (request, response) {
-  db.queryTournamentsByYear(request.query.year, (results) => {
-    response.json(results);
-  });
-});
-
-app.get("/playerStatistics", function (request, response) {
-  db.showAggregateStatistics(
-    request.query.name,
-    request.query.start,
-    request.query.finish,
-    (results) => {
-      response.json(results[0]);
-    }
-  );
 });
 
 app.listen(port, () => console.log("Server is starting on PORT,", port));

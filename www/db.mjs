@@ -11,6 +11,17 @@ function connect() {
   connection.connect();
 }
 
+function getGameIdByName(name, callback) {
+  connection.query(
+    "SELECT GameID FROM Games WHERE GameName = ?",
+    [name],
+    (error, results) => {
+      if (error) throw error;
+      callback(results.length > 0 ? results[0].GameID : null);
+    }
+  );
+}
+
 function getDesignerIdByName(name, callback) {
   connection.query(
     "SELECT DesignerID FROM Designers WHERE DesignerName = ?",
@@ -22,16 +33,116 @@ function getDesignerIdByName(name, callback) {
   );
 }
 
+function getArtistIdByName(name, callback) {
+  connection.query(
+    "SELECT ArtistID FROM Artists WHERE ArtistName = ?",
+    [name],
+    (error, results) => {
+      if (error) throw error;
+      callback(results.length > 0 ? results[0].ArtistID : null);
+    }
+  );
+}
+
+function getPublisherIdByName(name, callback) {
+  connection.query(
+    "SELECT PublisherID FROM Publishers WHERE PublisherName = ?",
+    [name],
+    (error, results) => {
+      if (error) throw error;
+      callback(results.length > 0 ? results[0].PublisherID : null);
+    }
+  );
+}
+
+function getCategoryIdByName(name, callback) {
+  connection.query(
+    "SELECT CategoryID FROM Categories WHERE CategoryName = ?",
+    [name],
+    (error, results) => {
+      if (error) throw error;
+      callback(results.length > 0 ? results[0].CategoryID : null);
+    }
+  );
+}
+
+function getMechanicIdByName(name, callback) {
+  connection.query(
+    "SELECT MechanicID FROM Mechanics WHERE MechanicName = ?",
+    [name],
+    (error, results) => {
+      if (error) throw error;
+      callback(results.length > 0 ? results[0].MechanicID : null);
+    }
+  );
+}
+
 function resolveNamesToIds(options, callback) {
+  let tasks = 0; // To keep track of asynchronous tasks
+
+  function decrementTasksAndCallCallback() {
+    tasks--;
+    if (tasks === 0) {
+      callback(options);
+    }
+  }
+
+  if (options.gameName) {
+    tasks++;
+    getGameIdByName(options.gameName, (gameId) => {
+      options.game = gameId;
+      delete options.gameName;
+      decrementTasksAndCallCallback();
+    });
+  }
+
   if (options.designerName) {
+    tasks++;
     getDesignerIdByName(options.designerName, (designerId) => {
-      console.log("id:", designerId);
       options.designer = designerId;
       delete options.designerName;
-      // Continue for other fields like artistName, publisherName, etc.
-      callback(options);
+      decrementTasksAndCallCallback();
     });
-  } else {
+  }
+
+  if (options.artistName) {
+    tasks++;
+    getArtistIdByName(options.artistName, (artistId) => {
+      options.artist = artistId;
+      delete options.artistName;
+      decrementTasksAndCallCallback();
+    });
+  }
+
+  if (options.publisherName) {
+    tasks++;
+    getPublisherIdByName(options.publisherName, (publisherId) => {
+      options.publisher = publisherId;
+      delete options.publisherName;
+      decrementTasksAndCallCallback();
+    });
+  }
+
+  if (options.categoryName) {
+    tasks++;
+    getCategoryIdByName(options.categoryName, (categoryId) => {
+      options.category = categoryId;
+      delete options.categoryName;
+      decrementTasksAndCallCallback();
+    });
+  }
+
+  if (options.mechanicName) {
+    tasks++;
+    getMechanicIdByName(options.mechanicName, (mechanicId) => {
+      options.mechanic = mechanicId;
+      delete options.mechanicName;
+      decrementTasksAndCallCallback();
+    });
+  }
+
+  // If no asynchronous tasks were added, immediately call the callback
+  if (tasks === 0) {
     callback(options);
   }
 }
@@ -42,6 +153,11 @@ function queryGames(options, callback) {
     let joins = [];
     let conditions = [];
     let params = [];
+
+    if (resolvedOptions.game) {
+      conditions.push("Games.GameID = ?");
+      params.push(resolvedOptions.game);
+    }
 
     if (resolvedOptions.publisher) {
       joins.push("JOIN Publishes ON Games.GameID = Publishes.GameID");
@@ -68,20 +184,16 @@ function queryGames(options, callback) {
     }
 
     if (resolvedOptions.mechanic) {
-      joins.push("JOIN Mechanics ON Games.GameID = HaveMechanic.GameID");
-      conditions.push("Mechanics.MechanicID = ?");
+      joins.push("JOIN HaveMechanic ON Games.GameID = HaveMechanic.GameID");
+      conditions.push("HaveMechanic.MechanicID = ?");
       params.push(resolvedOptions.publisher);
     }
-
+    // console.log(conditions);
     let query =
       baseQuery +
       joins.join(" ") +
       (conditions.length ? " WHERE " + conditions.join(" AND ") : "");
 
-    console.log(joins);
-    console.log(conditions);
-    console.log(params);
-    console.log(query);
     connection.query(query, params, (error, results) => {
       if (error) throw error;
       callback(results);
@@ -96,11 +208,16 @@ function disconnect() {
 export { connection, connect, queryGames, disconnect };
 
 // For testing:
-connect();
-queryGames({ designerName: "Karl-Heinz Schmiel" }, (results) => {
-  console.log(results);
-  disconnect();
-});
+// connect();
+// queryGames(
+//   {
+//     gameName: "Dune",
+//   },
+//   (results) => {
+//     console.log(results);
+//     disconnect();
+//   }
+// );
 
 // const testCases = [
 //   { publisher: 1, artist: null, designer: null },

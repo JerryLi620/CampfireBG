@@ -1,69 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Tennis Statistics</title>
-    <meta charset="utf-8" />
-    <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Board Game Search</title>
   </head>
-  <div class="navbar">
-    <button class="tablink" onclick="openPage('Player', this)">
-      Player Details
-    </button>
-    <button class="tablink" onclick="openPage('Tournaments', this)">
-      Tournaments By Year
-    </button>
-    <button class="tablink" onclick="openPage('Statistics', this)">
-      Player Statistics
-    </button>
-  </div>
   <body>
-    <div id="Player" class="tabcontent">
-      <!-- Player Details -->
-      <section>
-        <h2>Get Player Details</h2>
-        <label for="playerName">Player Name:</label>
-        <input type="text" id="playerName" required />
-        <button onclick="fetchPlayerData()">Fetch Details</button>
-        <table id="playerDetails"></table>
-      </section>
+    <h1>Board Game Search</h1>
+    <form id="searchForm">
+      <label for="gameName">Game Name:</label>
+      <input type="text" id="gameName" name="gameName" /><br /><br />
 
-      <hr />
-    </div>
+      <label for="designerName">Designer Name:</label>
+      <input type="text" id="designerName" name="designerName" /><br /><br />
 
-    <div id="Tournaments" class="tabcontent">
-      <!-- Tournament Details -->
-      <section>
-        <h2>Get Tournaments By Year</h2>
-        <label for="tournamentYear">Year:</label>
-        <input type="number" id="tournamentYear" required />
-        <button onclick="fetchTournamentsByYear()">Fetch Tournaments</button>
-        <table id="tournamentDetails"></table>
-      </section>
+      <label for="artistName">Artist Name:</label>
+      <input type="text" id="artistName" name="artistName" /><br /><br />
 
-      <hr />
-    </div>
+      <label for="publisherName">Publisher Name:</label>
+      <input type="text" id="publisherName" name="publisherName" /><br /><br />
 
-    <div id="Statistics" class="tabcontent">
-      <!-- Aggregate Statistics -->
-      <section>
-        <h2>Get Player Statistics Between Dates</h2>
-        <label for="playerName">Player Name:</label>
-        <input
-          type="text"
-          id="playerNameStat"
-          placeholder="Enter player name"
-          required
-        />
-        <label for="startDate">Start Date:</label>
-        <input type="date" id="startDate" required />
-        <label for="endDate">End Date:</label>
-        <input type="date" id="endDate" required />
-        <button onclick="fetchStatisticsData()">Fetch Statistics</button>
-        <table id="statisticsDetails"></table>
-      </section>
-    </div>
+      <label for="categoryName">Category Name:</label>
+      <input type="text" id="categoryName" name="categoryName" /><br /><br />
 
-    <!-- JS to interact with the server -->
+      <label for="mechanicName">Mechanic Name:</label>
+      <input type="text" id="mechanicName" name="mechanicName" /><br /><br />
+
+      <button type="submit">Search</button>
+    </form>
+
+    <h2>Results:</h2>
+    <div id="results"></div>
+
     <script src="script.js"></script>
   </body>
 </html>
