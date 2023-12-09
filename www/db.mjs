@@ -1,4 +1,5 @@
 import { createConnection } from "mysql2";
+import bcrypt from "bcrypt";
 
 var connection = createConnection({
   host: "localhost",
@@ -13,66 +14,72 @@ function connect() {
 
 function getGameIdByName(name, callback) {
   connection.query(
-    "SELECT GameID FROM Games WHERE GameName = ?",
-    [name],
+    "SELECT GameID FROM Games WHERE GameName LIKE ?",
+    ["%" + name + "%"],
     (error, results) => {
       if (error) throw error;
-      callback(results.length > 0 ? results[0].GameID : null);
+      const gameIds = results.map((row) => row.GameID);
+      callback(gameIds);
     }
   );
 }
 
 function getDesignerIdByName(name, callback) {
   connection.query(
-    "SELECT DesignerID FROM Designers WHERE DesignerName = ?",
-    [name],
+    "SELECT DesignerID FROM Designers WHERE DesignerName LIKE ?",
+    ["%" + name + "%"],
     (error, results) => {
       if (error) throw error;
-      callback(results.length > 0 ? results[0].DesignerID : null);
+      const designerIds = results.map((row) => row.DesignerID);
+      callback(designerIds);
     }
   );
 }
 
 function getArtistIdByName(name, callback) {
   connection.query(
-    "SELECT ArtistID FROM Artists WHERE ArtistName = ?",
-    [name],
+    "SELECT ArtistID FROM Artists WHERE ArtistName LIKE ?",
+    ["%" + name + "%"],
     (error, results) => {
       if (error) throw error;
-      callback(results.length > 0 ? results[0].ArtistID : null);
+      const artistIds = results.map((row) => row.ArtistID);
+      callback(artistIds);
     }
   );
 }
 
 function getPublisherIdByName(name, callback) {
   connection.query(
-    "SELECT PublisherID FROM Publishers WHERE PublisherName = ?",
-    [name],
+    "SELECT PublisherID FROM Publishers WHERE PublisherName LIKE ?",
+    ["%" + name + "%"],
     (error, results) => {
       if (error) throw error;
-      callback(results.length > 0 ? results[0].PublisherID : null);
+      const publisherIds = results.map((row) => row.PublisherID);
+      callback(publisherIds);
     }
   );
 }
 
 function getCategoryIdByName(name, callback) {
   connection.query(
-    "SELECT CategoryID FROM Categories WHERE CategoryName = ?",
-    [name],
+    "SELECT CategoryID FROM Categories WHERE CategoryName LIKE ?",
+    ["%" + name + "%"],
     (error, results) => {
       if (error) throw error;
-      callback(results.length > 0 ? results[0].CategoryID : null);
+      const categoryIds = results.map((row) => row.CategoryID);
+      callback(categoryIds);
     }
   );
 }
 
 function getMechanicIdByName(name, callback) {
   connection.query(
-    "SELECT MechanicID FROM Mechanics WHERE MechanicName = ?",
-    [name],
+    "SELECT MechanicID FROM Mechanics WHERE MechanicName LIKE ?",
+    ["%" + name + "%"],
     (error, results) => {
       if (error) throw error;
-      callback(results.length > 0 ? results[0].MechanicID : null);
+      const mechanicIds = results.map((row) => row.MechanicID);
+      callback(mechanicIds);
     }
   );
 }
@@ -155,38 +162,43 @@ function queryGames(options, callback) {
     let params = [];
 
     if (resolvedOptions.game) {
-      conditions.push("Games.GameID = ?");
+      conditions.push(`Games.GameID IN (${resolvedOptions.game.join(", ")})`);
       params.push(resolvedOptions.game);
     }
 
-    if (resolvedOptions.publisher) {
+    if (resolvedOptions.publisher && resolvedOptions.publisher.length > 0) {
       joins.push("JOIN Publishes ON Games.GameID = Publishes.GameID");
-      conditions.push("Publishes.PublisherID = ?");
-      params.push(resolvedOptions.publisher);
+      conditions.push(
+        `Publishes.PublisherID IN (${resolvedOptions.publisher.join(", ")})`
+      );
     }
 
-    if (resolvedOptions.artist) {
+    if (resolvedOptions.artist && resolvedOptions.artist.length > 0) {
       joins.push("JOIN Paints ON Games.GameID = Paints.GameID");
-      conditions.push("Paints.ArtistID = ?");
-      params.push(resolvedOptions.artist);
+      conditions.push(
+        `Paints.ArtistID IN (${resolvedOptions.artist.join(", ")})`
+      );
     }
 
-    if (resolvedOptions.designer) {
+    if (resolvedOptions.designer && resolvedOptions.designer.length > 0) {
       joins.push("JOIN Designs ON Games.GameID = Designs.GameID");
-      conditions.push("Designs.DesignerID = ?");
-      params.push(resolvedOptions.designer);
+      conditions.push(
+        `Designs.DesignerID IN (${resolvedOptions.designer.join(", ")})`
+      );
     }
 
-    if (resolvedOptions.category) {
+    if (resolvedOptions.category && resolvedOptions.category.length > 0) {
       joins.push("JOIN Categorizes ON Games.GameID = Categorizes.GameID");
-      conditions.push("Categorizes.CategoryID = ?");
-      params.push(resolvedOptions.publisher);
+      conditions.push(
+        `Categorizes.CategoryID IN (${resolvedOptions.category.join(", ")})`
+      );
     }
 
-    if (resolvedOptions.mechanic) {
+    if (resolvedOptions.mechanic && resolvedOptions.mechanic.length > 0) {
       joins.push("JOIN HaveMechanic ON Games.GameID = HaveMechanic.GameID");
-      conditions.push("HaveMechanic.MechanicID = ?");
-      params.push(resolvedOptions.publisher);
+      conditions.push(
+        `HaveMechanic.MechanicID IN (${resolvedOptions.mechanic.join(", ")})`
+      );
     }
     // console.log(conditions);
     let query =
@@ -201,37 +213,43 @@ function queryGames(options, callback) {
   });
 }
 
+function registerUser(username, email, hashedPassword, callback) {
+  const query =
+    "INSERT INTO Users (Username, Email, UserPassword) VALUES (?, ?, ?)";
+
+  connection.query(query, [username, email, hashedPassword], (err, results) => {
+    callback(err, results);
+  });
+}
+
 function disconnect() {
   connection.end();
 }
 
-export { connection, connect, queryGames, disconnect };
+export { connection, connect, queryGames, registerUser, disconnect };
 
-// For testing:
-// connect();
-// queryGames(
-//   {
-//     gameName: "Dune",
-//   },
-//   (results) => {
-//     console.log(results);
-//     disconnect();
-//   }
-// );
+//For testing:
+async function testRegisterUser() {
+  connect();
 
-// const testCases = [
-//   { publisher: 1, artist: null, designer: null },
-//   { publisher: null, artist: 2, designer: null },
-//   { publisher: null, artist: null, designer: 3 },
-//   { publisher: 1, artist: 2, designer: null },
-//   { publisher: null, artist: 2, designer: 3 },
-//   { publisher: 1, artist: null, designer: 3 },
-//   { publisher: 1, artist: 2, designer: 3 },
-// ];
+  try {
+    const username = "Jerry";
+    const email = "lmyjerry@gmail.com";
+    const password = "12345678";
+    const hashedPassword = await bcrypt.hash(password, 10);
 
-// testCases.forEach((testCase, index) => {
-//   console.log(`\nRunning Test Case ${index + 1}:`, testCase);
-//   db.queryGames(testCase, (results) => {
-//     console.log(`Results for Test Case ${index + 1}:`, results);
-//   });
-// });
+    registerUser(username, email, hashedPassword, (err, results) => {
+      if (err) {
+        console.error("Registration error:", err);
+      } else {
+        console.log("Registration successful:", results);
+      }
+      disconnect();
+    });
+  } catch (error) {
+    console.error("Error hashing password:", error);
+    disconnect();
+  }
+}
+
+// testRegisterUser();
