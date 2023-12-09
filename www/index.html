@@ -1,37 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
+<head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css">
     <title>Board Game Search</title>
-  </head>
-  <body>
+</head>
+<body class="container mt-4">
+
     <h1>Board Game Search</h1>
     <form id="searchForm">
-      <label for="gameName">Game Name:</label>
-      <input type="text" id="gameName" name="gameName" /><br /><br />
+    <div class="row g-2">
+        <div class="col-md">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="gameName" name="gameName">
+                <label for="gameName">Game Name</label>
+            </div>
+        </div>
 
-      <label for="designerName">Designer Name:</label>
-      <input type="text" id="designerName" name="designerName" /><br /><br />
+        <div class="col-md">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="designerName" name="designerName">
+                <label for="designerName">Designer Name</label>
+            </div>
+        </div>
 
-      <label for="artistName">Artist Name:</label>
-      <input type="text" id="artistName" name="artistName" /><br /><br />
+        <div class="col-md">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="artistName" name="artistName">
+                <label for="artistName">Artist Name</label>
+            </div>
+        </div>
 
-      <label for="publisherName">Publisher Name:</label>
-      <input type="text" id="publisherName" name="publisherName" /><br /><br />
+        <div class="col-md">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="publisherName" name="publisherName">
+                <label for="publisherName">Publisher Name</label>
+            </div>
+        </div>
 
-      <label for="categoryName">Category Name:</label>
-      <input type="text" id="categoryName" name="categoryName" /><br /><br />
+        <div class="col-md">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="categoryName" name="categoryName">
+                <label for="categoryName">Category Name</label>
+            </div>
+        </div>
 
-      <label for="mechanicName">Mechanic Name:</label>
-      <input type="text" id="mechanicName" name="mechanicName" /><br /><br />
+        <div class="col-md">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="mechanicName" name="mechanicName">
+                <label for="mechanicName">Mechanic Name</label>
+            </div>
+        </div>
+    </div>
 
-      <button type="submit">Search</button>
+    <div class="row mt-3">
+        <div class="col-md">
+            <button type="submit" class="btn btn-primary">Search</button>
+        </div>
+    </div>
     </form>
-
+    
     <h2>Results:</h2>
     <div id="results"></div>
 
     <script src="script.js"></script>
-  </body>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+</body>
 </html>

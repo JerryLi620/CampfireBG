@@ -5,10 +5,9 @@ import mysql.connector
 def create_connection():
     # Adjust the connection details accordingly
     connection = mysql.connector.connect(
-        host='localhost',
-        user='root',
-        password='lmy20030620',
-        database='BoardgameData'
+        host="localhost",
+        user="root",
+        password="",
     )
     return connection
 
@@ -234,17 +233,17 @@ if __name__ == "__main__":
     create_schema('BoardGameSchema.sql')
     print("Successfully create schema.")
 
-    import_game_data('data_cleaned/games.csv',cursor, connection)
-    import_artist_data('data_cleaned/painted.csv',cursor, connection)
-    import_designer_data('data_cleaned/designed.csv',cursor, connection)
-    import_category_data('data_cleaned/categorized.csv',cursor, connection)
-    import_mechanic_data('data_cleaned/moves.csv',cursor, connection)
-    import_publisher_data('data_cleaned/published.csv',cursor, connection)
-    import_painted_data('data_cleaned/painted.csv',cursor, connection)
-    import_designed_data('data_cleaned/designed.csv',cursor, connection)
-    import_catagorized_data('data_cleaned/categorized.csv',cursor, connection)
-    import_have_data('data_cleaned/moves.csv',cursor, connection)
-    import_publish_data('data_cleaned/published.csv',cursor, connection)
+    import_game_data('data_cleaned/games.csv', cursor, connection)
+    import_artist_data('data_cleaned/painted.csv', cursor, connection)
+    import_designer_data('data_cleaned/designed.csv', cursor, connection)
+    import_category_data('data_cleaned/categorized.csv', cursor, connection)
+    import_mechanic_data('data_cleaned/moves.csv', cursor, connection)
+    import_publisher_data('data_cleaned/published.csv', cursor, connection)
+    import_painted_data('data_cleaned/painted.csv', cursor, connection)
+    import_designed_data('data_cleaned/designed.csv', cursor, connection)
+    import_catagorized_data('data_cleaned/categorized.csv', cursor, connection)
+    import_have_data('data_cleaned/moves.csv', cursor, connection)
+    import_publish_data('data_cleaned/published.csv', cursor, connection)
     print("Successfully import data.")
 
     cursor.close()
