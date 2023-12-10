@@ -2,9 +2,9 @@ import { createConnection } from "mysql2";
 import bcrypt from "bcrypt";
 
 var connection = createConnection({
-  host: '127.0.0.1',
+  host: "127.0.0.1",
   user: "root",
-  password: '',
+  password: "lmy20030620",
   database: "BoardgameData",
 });
 
@@ -60,30 +60,6 @@ function getPublisherIdByName(name, callback) {
   );
 }
 
-function getCategoryIdByName(name, callback) {
-  connection.query(
-    "SELECT CategoryID FROM Categories WHERE CategoryName LIKE ?",
-    ["%" + name + "%"],
-    (error, results) => {
-      if (error) throw error;
-      const categoryIds = results.map((row) => row.CategoryID);
-      callback(categoryIds);
-    }
-  );
-}
-
-function getMechanicIdByName(name, callback) {
-  connection.query(
-    "SELECT MechanicID FROM Mechanics WHERE MechanicName LIKE ?",
-    ["%" + name + "%"],
-    (error, results) => {
-      if (error) throw error;
-      const mechanicIds = results.map((row) => row.MechanicID);
-      callback(mechanicIds);
-    }
-  );
-}
-
 function resolveNamesToIds(options, callback) {
   let tasks = 0; // To keep track of asynchronous tasks
 
@@ -130,24 +106,6 @@ function resolveNamesToIds(options, callback) {
     });
   }
 
-  if (options.categoryName) {
-    tasks++;
-    getCategoryIdByName(options.categoryName, (categoryId) => {
-      options.category = categoryId;
-      delete options.categoryName;
-      decrementTasksAndCallCallback();
-    });
-  }
-
-  if (options.mechanicName) {
-    tasks++;
-    getMechanicIdByName(options.mechanicName, (mechanicId) => {
-      options.mechanic = mechanicId;
-      delete options.mechanicName;
-      decrementTasksAndCallCallback();
-    });
-  }
-
   // If no asynchronous tasks were added, immediately call the callback
   if (tasks === 0) {
     callback(options);
@@ -155,15 +113,39 @@ function resolveNamesToIds(options, callback) {
 }
 
 function queryGames(options, callback) {
+  // Initialize the base query and join clauses
+  let baseQuery = `
+    SELECT 
+      Games.GameID, 
+      Games.GameName, 
+      Games.GameType, 
+      Games.Rating, 
+      Games.Complexity, 
+      Games.YearPub, 
+      Games.MinPlayer, 
+      Games.MaxPlayer, 
+      Games.MinTime, 
+      Games.MaxTime,
+      GROUP_CONCAT(DISTINCT Categories.CategoryName) AS Categories, 
+      GROUP_CONCAT(DISTINCT Mechanics.MechanicName) AS Mechanics
+    FROM Games
+  `;
+
+  let joins = [
+    "LEFT JOIN Categorizes ON Games.GameID = Categorizes.GameID",
+    "LEFT JOIN Categories ON Categorizes.CategoryID = Categories.CategoryID",
+    "LEFT JOIN HaveMechanic ON Games.GameID = HaveMechanic.GameID",
+    "LEFT JOIN Mechanics ON HaveMechanic.MechanicID = Mechanics.MechanicID",
+  ];
+
+  // Resolve names to IDs
   resolveNamesToIds(options, (resolvedOptions) => {
-    let baseQuery = "SELECT * FROM Games ";
-    let joins = [];
     let conditions = [];
     let params = [];
 
-    if (resolvedOptions.game) {
+    // Add conditions for resolvedOptions
+    if (resolvedOptions.game && resolvedOptions.game.length > 0) {
       conditions.push(`Games.GameID IN (${resolvedOptions.game.join(", ")})`);
-      params.push(resolvedOptions.game);
     }
 
     if (resolvedOptions.publisher && resolvedOptions.publisher.length > 0) {
@@ -187,27 +169,49 @@ function queryGames(options, callback) {
       );
     }
 
-    if (resolvedOptions.category && resolvedOptions.category.length > 0) {
-      joins.push("JOIN Categorizes ON Games.GameID = Categorizes.GameID");
-      conditions.push(
-        `Categorizes.CategoryID IN (${resolvedOptions.category.join(", ")})`
-      );
+    // Add conditions for rating and complexity
+    if (options.rating) {
+      conditions.push("Games.Rating >= ?");
+      params.push(options.rating);
+    }
+    if (options.complexity) {
+      conditions.push("Games.Complexity >= ?");
+      params.push(options.complexity);
     }
 
-    if (resolvedOptions.mechanic && resolvedOptions.mechanic.length > 0) {
-      joins.push("JOIN HaveMechanic ON Games.GameID = HaveMechanic.GameID");
-      conditions.push(
-        `HaveMechanic.MechanicID IN (${resolvedOptions.mechanic.join(", ")})`
-      );
+    if (options.minPlayer) {
+      conditions.push("Games.MinPlayer >= ?");
+      params.push(options.minPlayer);
     }
-    // console.log(conditions);
+
+    if (options.maxPlayer) {
+      conditions.push("Games.MaxPlayer <= ?");
+      params.push(options.maxPlayer);
+    }
+
+    if (options.minTime) {
+      conditions.push("Games.MinTime >= ?");
+      params.push(options.minTime);
+    }
+
+    if (options.maxTime) {
+      conditions.push("Games.MaxTime <= ?");
+      params.push(options.maxTime);
+    }
+
+    // Construct the final query
     let query =
       baseQuery +
       joins.join(" ") +
-      (conditions.length ? " WHERE " + conditions.join(" AND ") : "");
+      (conditions.length ? " WHERE " + conditions.join(" AND ") : "") +
+      " GROUP BY Games.GameID";
 
+    console.log(query);
     connection.query(query, params, (error, results) => {
-      if (error) throw error;
+      if (error) {
+        console.error(error);
+        throw error;
+      }
       callback(results);
     });
   });
@@ -216,7 +220,6 @@ function queryGames(options, callback) {
 function registerUser(username, email, hashedPassword, callback) {
   const query =
     "INSERT INTO Users (Username, Email, UserPassword) VALUES (?, ?, ?)";
-
   connection.query(query, [username, email, hashedPassword], (err, results) => {
     callback(err, results);
   });
@@ -229,27 +232,41 @@ function disconnect() {
 export { connection, connect, queryGames, registerUser, disconnect };
 
 //For testing:
-async function testRegisterUser() {
-  connect();
+// connect();
+// const searchOptions = {
+//   gameName: "Splendor",
+//   rating: 7.0,
+//   minPlayer: 1,
+//   maxTime: 20,
+// };
 
-  try {
-    const username = "Jerry";
-    const email = "lmyjerry@gmail.com";
-    const password = "12345678";
-    const hashedPassword = await bcrypt.hash(password, 10);
+// queryGames(searchOptions, (results) => {
+//   console.log("Test Results for queryGames:");
+//   console.log(results);
+//   disconnect();
+// });
 
-    registerUser(username, email, hashedPassword, (err, results) => {
-      if (err) {
-        console.error("Registration error:", err);
-      } else {
-        console.log("Registration successful:", results);
-      }
-      disconnect();
-    });
-  } catch (error) {
-    console.error("Error hashing password:", error);
-    disconnect();
-  }
-}
+// async function testRegisterUser() {
+//   connect();
+
+//   try {
+//     const username = "Jerry";
+//     const email = "lmyjerry@gmail.com";
+//     const password = "12345678";
+//     const hashedPassword = await bcrypt.hash(password, 10);
+
+//     registerUser(username, email, hashedPassword, (err, results) => {
+//       if (err) {
+//         console.error("Registration error:", err);
+//       } else {
+//         console.log("Registration successful:", results);
+//       }
+//       disconnect();
+//     });
+//   } catch (error) {
+//     console.error("Error hashing password:", error);
+//     disconnect();
+//   }
+// }
 
 // testRegisterUser();
