@@ -48,6 +48,7 @@
               type="text"
               class="form-control"
               id="gameName"
+              placeholder="Game Name"
               name="gameName"
             />
             <label for="gameName">Game Name</label>
@@ -60,6 +61,7 @@
               type="text"
               class="form-control"
               id="designerName"
+              placeholder="Designer Name"
               name="designerName"
             />
             <label for="designerName">Designer Name</label>
@@ -72,6 +74,7 @@
               type="text"
               class="form-control"
               id="artistName"
+              placeholder="Artist Name"
               name="artistName"
             />
             <label for="artistName">Artist Name</label>
@@ -84,45 +87,75 @@
               type="text"
               class="form-control"
               id="publisherName"
+              placeholder="Publisher Name"
               name="publisherName"
             />
             <label for="publisherName">Publisher Name</label>
           </div>
         </div>
 
-        <div class="col-md">
-          <label for="numPlayers">Number of Players</label>
-          <div id="numPlayers"></div>
-          <div class="row">
-            <div class="col-md">
-              <label for="minPlayers">Min Players:</label>
-              <input
-                type="number"
-                class="form-control"
-                id="minPlayers"
-                name="minPlayers"
-                min="1"
-                max="10"
-                value="1"
-              />
+        <!-- Slider input portion -->
+        <div class="row g-2">
+          <div class="col-md">
+            <label for="minPlayer" class="form-label mb-2">Min Players</label>
+            <div class="range" data-mdb-range-init>
+                <input
+                    type="range"
+                    class="form-range"
+                    id="minPlayer"
+                    name="minPlayer"
+                    min="0"
+                    max="10"
+                    oninput="this.nextElementSibling.innerText = this.value"
+                />
+                <output>0</output>
             </div>
-            <div class="col-md">
-              <label for="maxPlayers">Max Players:</label>
-              <input
-                type="number"
-                class="form-control"
-                id="maxPlayers"
-                name="maxPlayers"
-                min="1"
-                max="10"
-                value="10"
-              />
-            </div>
-          </div>
-          <div id="slider-range"></div>
         </div>
-      </div>
-
+  
+        
+          <div class="col-md">
+            <label for="maxPlayer" class="form-label">Max Players</label>
+            <input
+              type="range"
+              class="form-range"
+              id="maxPlayer"
+              name="maxPlayer"
+              min="0"
+              max="10"
+              oninput="this.nextElementSibling.innerText = this.value"
+            />
+            <output>0</output>
+          </div>
+        
+          <div class="col-md">
+            <label for="maxTime" class="form-label">Max Time</label>
+            <input
+              type="range"
+              class="form-range"
+              id="maxTime"
+              name="maxTime"
+              min="0"
+              max="120"
+              oninput="this.nextElementSibling.innerText = this.value"
+            />
+            <output>0</output>
+          </div>
+        
+          <div class="col-md">
+            <label for="minTime" class="form-label">Min Time</label>
+            <input
+              type="range"
+              class="form-range"
+              id="minTime"
+              name="minTime"
+              min="0"
+              max="120"
+              oninput="this.nextElementSibling.innerText = this.value"
+            />
+            <output>0</output>
+          </div>
+        </div>
+        
       <div class="row mt-3">
         <div class="col-md">
           <button type="submit" class="btn btn-primary">Search</button>
