@@ -102,3 +102,33 @@ document
         results.textContent = "No results found.";
     }
 }
+
+// Initialize noUiSlider for the numPlayers range
+var numPlayersSlider = document.getElementById('numPlayers');
+var minPlayersInput = document.getElementById('minPlayers');
+var maxPlayersInput = document.getElementById('maxPlayers');
+var rangeDisplay = document.getElementById('slider-range');
+
+noUiSlider.create(numPlayersSlider, {
+    start: [1, 10], // Initial values for min and max
+    connect: true,   // Display a colored bar between handles
+    range: {
+        'min': 1,
+        'max': 10
+    }
+});
+
+numPlayersSlider.noUiSlider.on('update', function (values) {
+    minPlayersInput.value = values[0];
+    maxPlayersInput.value = values[1];
+    rangeDisplay.innerText = 'Range: ' + values[0] + ' - ' + values[1];
+});
+
+// Update slider values when input changes
+minPlayersInput.addEventListener('change', function () {
+    numPlayersSlider.noUiSlider.set([this.value, maxPlayersInput.value]);
+});
+
+maxPlayersInput.addEventListener('change', function () {
+    numPlayersSlider.noUiSlider.set([minPlayersInput.value, this.value]);
+});
