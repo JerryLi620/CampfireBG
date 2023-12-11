@@ -16,9 +16,12 @@
         margin-bottom: 20px; /* Add margin at the bottom of the body */
       }
 
-      #searchForm,
+      #searchForm {
+        margin-top: 20px; /* Add margin below the search form and results */
+      }
       #results {
         margin-bottom: 20px; /* Add margin below the search form and results */
+        margin-top: 20px;
       }
 
       #slider-range {
@@ -28,9 +31,18 @@
     </style>
     <title>Board Game Search</title>
   </head>
-  <body class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-      <h1>Board Game Search</h1>
+  <body>
+    <nav class="navbar navbar-light bg-light">
+      <a class="navbar-brand" href="#">
+        <img
+          src="logo/Campfire.png"
+          width="50"
+          height="40"
+          class="d-inline-block align-mid"
+          alt=""
+        />
+        Board Game Search
+      </a>
       <button
         type="button"
         class="btn btn-primary"
@@ -39,8 +51,8 @@
       >
         Sign Up
       </button>
-    </div>
-    <form id="searchForm">
+    </nav>
+    <form id="searchForm" , class="container">
       <div class="row g-2">
         <div class="col-md">
           <div class="form-floating">
@@ -99,20 +111,19 @@
           <div class="col-md">
             <label for="minPlayer" class="form-label mb-2">Min Players</label>
             <div class="range" data-mdb-range-init>
-                <input
-                    type="range"
-                    class="form-range"
-                    id="minPlayer"
-                    name="minPlayer"
-                    min="0"
-                    max="10"
-                    oninput="this.nextElementSibling.innerText = this.value"
-                />
-                <output>0</output>
+              <input
+                type="range"
+                class="form-range"
+                id="minPlayer"
+                name="minPlayer"
+                min="0"
+                max="10"
+                oninput="this.nextElementSibling.innerText = this.value"
+              />
+              <output>5</output>
             </div>
-        </div>
-  
-        
+          </div>
+
           <div class="col-md">
             <label for="maxPlayer" class="form-label">Max Players</label>
             <input
@@ -124,9 +135,9 @@
               max="10"
               oninput="this.nextElementSibling.innerText = this.value"
             />
-            <output>0</output>
+            <output>5</output>
           </div>
-        
+
           <div class="col-md">
             <label for="maxTime" class="form-label">Max Time</label>
             <input
@@ -138,9 +149,9 @@
               max="120"
               oninput="this.nextElementSibling.innerText = this.value"
             />
-            <output>0</output>
+            <output>60</output>
           </div>
-        
+
           <div class="col-md">
             <label for="minTime" class="form-label">Min Time</label>
             <input
@@ -152,18 +163,19 @@
               max="120"
               oninput="this.nextElementSibling.innerText = this.value"
             />
-            <output>0</output>
+            <output>60</output>
           </div>
         </div>
-        
-      <div class="row mt-3">
-        <div class="col-md">
-          <button type="submit" class="btn btn-primary">Search</button>
+
+        <div class="row mt-3">
+          <div class="col-md">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </div>
         </div>
       </div>
     </form>
 
-    <div id="results"></div>
+    <div id="results" class="container"></div>
 
     <!-- Registration modal -->
     <div

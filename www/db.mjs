@@ -206,7 +206,6 @@ function queryGames(options, callback) {
       (conditions.length ? " WHERE " + conditions.join(" AND ") : "") +
       " GROUP BY Games.GameID";
 
-    console.log(query);
     connection.query(query, params, (error, results) => {
       if (error) {
         console.error(error);
@@ -234,8 +233,7 @@ export { connection, connect, queryGames, registerUser, disconnect };
 //For testing:
 // connect();
 // const searchOptions = {
-//   gameName: "Splendor",
-//   rating: 7.0,
+//   rating: 9.0,
 //   minPlayer: 1,
 //   maxTime: 20,
 // };
