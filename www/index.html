@@ -12,6 +12,10 @@
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"
+    />
     <style>
       img {
         margin-left: 10px;
@@ -26,7 +30,7 @@
 
       .col-md {
         margin-right: 10px;
-      font-family: serif;
+        font-family: serif;
       }
 
       #results {
@@ -43,32 +47,39 @@
         margin-right: 20px;
       }
 
-    .btn-outline-primary {
-    width: 100px;
-    height: 40px;
-    background-color: #9BBEC0; 
-    border-color: #8F8389; 
-    color: #E6EFE9; 
-    margin-right:10px;
-    font-family: fantasy;
-  }
-
- 
-  </style>
-  <title>CampfireBG</title>
-</head>
-<body>
-<nav class="navbar" style="background-color: #8F8389;">
-  <a class="navbar-brand" href="#" style="color: #E6EFE9; font-weight: bold; font-family: fantasy; font-size: x-large;">
-    <img
-      src="logo/Campfire.png"
-      width="50"
-      height="40"
-      class="d-inline-block align-mid"
-      alt=""
-    />
-    CampfireBG
-  </a>
+      .btn-outline-primary {
+        width: 100px;
+        height: 40px;
+        background-color: #9bbec0;
+        border-color: #8f8389;
+        color: #e6efe9;
+        margin-right: 10px;
+        font-family: fantasy;
+      }
+    </style>
+    <title>CampfireBG</title>
+  </head>
+  <body>
+    <nav class="navbar" style="background-color: #8f8389">
+      <a
+        class="navbar-brand"
+        href="#"
+        style="
+          color: #e6efe9;
+          font-weight: bold;
+          font-family: fantasy;
+          font-size: x-large;
+        "
+      >
+        <img
+          src="logo/Campfire.png"
+          width="50"
+          height="40"
+          class="d-inline-block align-mid"
+          alt=""
+        />
+        CampfireBG
+      </a>
       <div class="ms-auto">
         <div id="loginSection">
           <button
@@ -85,6 +96,7 @@
           <div id="greeting" style="display: none; font-family: fantasy">
             Hello, <span id="username"></span>
           </div>
+          <div id="userId" style="display: none"></div>
 
           <button
             type="button"
@@ -109,113 +121,159 @@
               placeholder="Game Name"
               name="gameName"
             />
-            <label for="gameName" style = "font-weight:bold">Game Name</label>
+            <label for="gameName" style="font-weight: bold">Game Name</label>
           </div>
         </div>
 
-    <div class="col-md">
-      <div class="form-floating">
-        <input
-          type="text"
-          class="form-control"
-          id="designerName"
-          placeholder="Designer Name"
-          name="designerName"
-        />
-        <label for="designerName" style = "font-weight:bold">Designer Name</label>
-      </div>
-    </div>
-
-    <div class="col-md">
-      <div class="form-floating">
-        <input
-          type="text"
-          class="form-control"
-          id="artistName"
-          placeholder="Artist Name"
-          name="artistName"
-        />
-        <label for="artistName" style = "font-weight:bold">Artist Name</label>
-      </div>
-    </div>
-
-    <div class="col-md">
-      <div class="form-floating">
-        <input
-          type="text"
-          class="form-control"
-          id="publisherName"
-          placeholder="Publisher Name"
-          name="publisherName"
-        />
-        <label for="publisherName" style = "font-weight:bold">Publisher Name</label>
-      </div>
-    </div>
-
-    <!-- Slider input portion -->
-    <div class="row g-2">
-      <div class="col-md">
-        <label for="numPlayers" style = "font-weight:bold">Number of Players</label>
-        <div id="numPlayers"></div>
-        <div class="row">
-          <div class="col-md">
-            <label for="minPlayers">Min:</label>
-            <input type="number" class="form-control" id="minPlayers" name="minPlayers" min="1" max="10" placeholder="1">
-          </div>
-          <div class="col-md">
-            <label for="maxPlayers">Max:</label>
-            <input type="number" class="form-control" id="maxPlayers" name="maxPlayers" min="1" max="10" placeholder="10">
+        <div class="col-md">
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="designerName"
+              placeholder="Designer Name"
+              name="designerName"
+            />
+            <label for="designerName" style="font-weight: bold"
+              >Designer Name</label
+            >
           </div>
         </div>
-        <div id="slider-range"></div>
-      </div>
 
-      <div class="col-md">
-        <label for="playTime" style = "font-weight:bold">Playing Time</label>
-        <div id="playTime"></div>
-        <div class="row">
-          <div class="col-md">
-            <label for="minTime">Min:</label>
-            <input type="number" class="form-control" id="minTime" name="minTime" min="0" max="120" placeholder="0" step="10">
-          </div>
-          <div class="col-md">
-            <label for="maxTime">Max:</label>
-            <input type="number" class="form-control" id="maxTime" name="maxTime" min="0" max="120" placeholder="120" step="10">
+        <div class="col-md">
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="artistName"
+              placeholder="Artist Name"
+              name="artistName"
+            />
+            <label for="artistName" style="font-weight: bold"
+              >Artist Name</label
+            >
           </div>
         </div>
-        <div id="slider-range"></div>
-      </div>
 
-      <div class="col-md" >
-        <label for="complexity" class="form-label" style = "font-weight:bold">Complexity (Max 5)</label>
-        <input
-          type="range"
-          class="form-range"
-          id="complexity"
-          name="complexity"
-          min="1"
-          max="5"
-          oninput="this.nextElementSibling.innerText = this.value"
-        />
-        <output>3</output>
-      </div>
+        <div class="col-md">
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="publisherName"
+              placeholder="Publisher Name"
+              name="publisherName"
+            />
+            <label for="publisherName" style="font-weight: bold"
+              >Publisher Name</label
+            >
+          </div>
+        </div>
 
-      <div class="col-md">
-        <label for="rating" class="form-label" style = "font-weight:bold">Rating (Max 10)</label>
-        <input
-          type="range"
-          class="form-range"
-          id="rating"
-          name="rating"
-          min="0"
-          max="10"
-          oninput="this.nextElementSibling.innerText = this.value"
-        />
-        <output>5</output>
-      </div>
-    </div>
-
+        <!-- Slider input portion -->
         <div class="row g-2">
+          <div class="col-md">
+            <label for="numPlayers" style="font-weight: bold"
+              >Number of Players</label
+            >
+            <div id="numPlayers"></div>
+            <div class="row">
+              <div class="col-md">
+                <label for="minPlayers">Min:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="minPlayers"
+                  name="minPlayers"
+                  min="1"
+                  max="10"
+                  placeholder="1"
+                />
+              </div>
+              <div class="col-md">
+                <label for="maxPlayers">Max:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="maxPlayers"
+                  name="maxPlayers"
+                  min="1"
+                  max="10"
+                  placeholder="10"
+                />
+              </div>
+            </div>
+            <div id="slider-range"></div>
+          </div>
+
+          <div class="col-md">
+            <label for="playTime" style="font-weight: bold">Playing Time</label>
+            <div id="playTime"></div>
+            <div class="row">
+              <div class="col-md">
+                <label for="minTime">Min:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="minTime"
+                  name="minTime"
+                  min="0"
+                  max="120"
+                  placeholder="0"
+                  step="10"
+                />
+              </div>
+              <div class="col-md">
+                <label for="maxTime">Max:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="maxTime"
+                  name="maxTime"
+                  min="0"
+                  max="120"
+                  placeholder="120"
+                  step="10"
+                />
+              </div>
+            </div>
+            <div id="slider-range"></div>
+          </div>
+
+          <div class="col-md">
+            <label for="complexity" class="form-label" style="font-weight: bold"
+              >Complexity (Max 5)</label
+            >
+            <input
+              type="range"
+              class="form-range"
+              id="complexity"
+              name="complexity"
+              min="1"
+              max="5"
+              oninput="this.nextElementSibling.innerText = this.value"
+            />
+            <output>3</output>
+          </div>
+
+          <div class="col-md">
+            <label for="rating" class="form-label" style="font-weight: bold"
+              >Rating (Max 10)</label
+            >
+            <input
+              type="range"
+              class="form-range"
+              id="rating"
+              name="rating"
+              min="0"
+              max="10"
+              oninput="this.nextElementSibling.innerText = this.value"
+            />
+            <output>5</output>
+          </div>
+        </div>
+
+        <div class="row g-2" , style="display: none" , id="savedGame">
           <div class="row mt-2">
             <div class="col-md">
               <div class="form-check">

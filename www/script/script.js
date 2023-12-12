@@ -1,9 +1,19 @@
-document
-  .getElementById("searchForm")
-  .addEventListener("submit", function (event) {
-    event.preventDefault();
+document.addEventListener("DOMContentLoaded", function () {
+  // Get the checkbox element
+  var savedGameCheck = document.getElementById("savedGameCheck");
 
-    // Collect form data
+  // Add the event listener to the search form
+  var searchForm = document.getElementById("searchForm");
+  if (searchForm) {
+    searchForm.addEventListener("submit", function (event) {
+      event.preventDefault();
+      performSearch(savedGameCheck.checked); // Perform search based on checkbox state
+    });
+  }
+
+  function performSearch(isMySavedGamesClicked = false) {
+    const isLoggedIn =
+      document.getElementById("loginButton").style.display === "none";
     var formData = {
       gameName: document.getElementById("gameName").value,
       designerName: document.getElementById("designerName").value,
@@ -17,20 +27,26 @@ document
       rating: document.getElementById("rating").value,
     };
 
-    fetch("/games?" + new URLSearchParams(formData))
+    if (isLoggedIn) {
+      formData.userId = window.userId;
+      formData.onlySaved = isMySavedGamesClicked; // Add a flag to indicate if only saved games should be fetched
+    }
+
+    var endpoint = isLoggedIn ? "/userGames" : "/games";
+    fetch(endpoint + "?" + new URLSearchParams(formData))
       .then((response) => response.json())
-      .then((data) => {
-        displayResults(data);
-      })
+      .then((data) => displayResults(data))
       .catch((error) => console.error("Error:", error));
-  });
+  }
+});
 
 function displayResults(data) {
+  const isLoggedIn =
+    document.getElementById("loginButton").style.display === "none";
   var resultsContainer = document.getElementById("results");
   resultsContainer.innerHTML = "";
   var tableWrapper = document.createElement("div");
   tableWrapper.classList.add("table-responsive");
-
   if (data && data.length > 0) {
     var table = document.createElement("table");
     table.classList.add("table", "table-hover");
@@ -67,6 +83,13 @@ function displayResults(data) {
     playTimeHeader.scope = "col";
     playTimeHeader.textContent = "PlayTime";
     headerRow.appendChild(playTimeHeader);
+
+    if (isLoggedIn) {
+      var savedHeader = document.createElement("th");
+      savedHeader.scope = "col";
+      savedHeader.textContent = "Saved";
+      headerRow.appendChild(savedHeader);
+    }
 
     thead.appendChild(headerRow);
     table.appendChild(thead);
@@ -130,6 +153,23 @@ function displayResults(data) {
           : result.MinTime + " ~ " + result.MaxTime + " min";
       row.appendChild(playTimeCell);
 
+      if (isLoggedIn) {
+        var savedCell = document.createElement("td");
+        savedCell.classList.add("text-center");
+
+        var starButton = document.createElement("button");
+        starButton.classList.add("btn", "btn-sm");
+        var starIcon = document.createElement("i");
+        starIcon.classList.add(result.IsFavorite ? "fas" : "far", "fa-star");
+        starButton.appendChild(starIcon);
+
+        starButton.onclick = function () {
+          toggleStar(starIcon, result.GameID);
+        };
+
+        savedCell.appendChild(starButton);
+        row.appendChild(savedCell);
+      }
       tbody.appendChild(row);
     });
 
@@ -139,5 +179,20 @@ function displayResults(data) {
     resultsContainer.appendChild(tableWrapper);
   } else {
     results.textContent = "No results found.";
+  }
+}
+
+function toggleStar(starIcon, gameId) {
+  // Toggle star appearance and log the action
+  if (starIcon.classList.contains("far")) {
+    starIcon.classList.remove("far");
+    starIcon.classList.add("fas");
+    // Placeholder for future functionality to save the game
+    console.log("Game saved, Game ID:", gameId);
+  } else {
+    starIcon.classList.remove("fas");
+    starIcon.classList.add("far");
+    // Placeholder for future functionality to unsave the game
+    console.log("Game unsaved, Game ID:", gameId);
   }
 }

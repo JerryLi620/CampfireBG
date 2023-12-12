@@ -65,14 +65,39 @@ app.post("/login", async (req, res) => {
         console.error(err);
         return res.status(401).json({ message: err.message });
       }
-
       // Login successful
-      res.status(200).json({ success: true, username: user.Username });
+      res
+        .status(200)
+        .json({ success: true, userId: user.UserID, username: user.Username });
     });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Server error" });
   }
+});
+
+app.post("/saveGame", async (req, res) => {
+  const { userId, gameId } = req.body;
+
+  try {
+    db.saveGame(userId, gameId, (err, results) => {
+      if (err) {
+        return res.status(500).send("Error saving game");
+      }
+      res.status(201).send("Game saved successfully");
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
+
+app.get("/userGames", async (request, response) => {
+  console.log(request.query);
+  db.queryUserGames(request.query, (results) => {
+    console.log(results);
+    response.json(results);
+  });
 });
 
 app.listen(port, () => console.log("Server is starting on PORT,", port));

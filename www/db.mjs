@@ -205,7 +205,120 @@ function queryGames(options, callback) {
       joins.join(" ") +
       (conditions.length ? " WHERE " + conditions.join(" AND ") : "") +
       " GROUP BY Games.GameID";
+    connection.query(query, params, (error, results) => {
+      if (error) {
+        console.error(error);
+        throw error;
+      }
+      callback(results);
+    });
+  });
+}
 
+function queryUserGames(options, callback) {
+  let baseQuery = `
+    SELECT 
+      Games.GameID, 
+      Games.GameName, 
+      Games.GameType, 
+      Games.Rating, 
+      Games.Complexity, 
+      Games.YearPub, 
+      Games.MinPlayer, 
+      Games.MaxPlayer, 
+      Games.MinTime, 
+      Games.MaxTime,
+      GROUP_CONCAT(DISTINCT Categories.CategoryName) AS Categories, 
+      GROUP_CONCAT(DISTINCT Mechanics.MechanicName) AS Mechanics,
+      CASE WHEN FavoriteGames.GameID IS NOT NULL THEN TRUE ELSE FALSE END AS IsFavorite
+    FROM Games
+  `;
+
+  let joins = [
+    "LEFT JOIN Categorizes ON Games.GameID = Categorizes.GameID",
+    "LEFT JOIN Categories ON Categorizes.CategoryID = Categories.CategoryID",
+    "LEFT JOIN HaveMechanic ON Games.GameID = HaveMechanic.GameID",
+    "LEFT JOIN Mechanics ON HaveMechanic.MechanicID = Mechanics.MechanicID",
+  ];
+
+  if (options.userId) {
+    let joinType;
+    if (options.onlySaved === "true") {
+      joinType = "INNER";
+    } else {
+      joinType = "LEFT";
+    }
+    joins.push(
+      `${joinType} JOIN FavoriteGames ON Games.GameID = FavoriteGames.GameID AND FavoriteGames.UserID = ?`
+    );
+  }
+
+  resolveNamesToIds(options, (resolvedOptions) => {
+    let conditions = [];
+    let params = [];
+
+    if (resolvedOptions.game && resolvedOptions.game.length > 0) {
+      conditions.push(`Games.GameID IN (${resolvedOptions.game.join(", ")})`);
+    }
+
+    if (resolvedOptions.publisher && resolvedOptions.publisher.length > 0) {
+      joins.push("JOIN Publishes ON Games.GameID = Publishes.GameID");
+      conditions.push(
+        `Publishes.PublisherID IN (${resolvedOptions.publisher.join(", ")})`
+      );
+    }
+
+    if (resolvedOptions.artist && resolvedOptions.artist.length > 0) {
+      joins.push("JOIN Paints ON Games.GameID = Paints.GameID");
+      conditions.push(
+        `Paints.ArtistID IN (${resolvedOptions.artist.join(", ")})`
+      );
+    }
+
+    if (resolvedOptions.designer && resolvedOptions.designer.length > 0) {
+      joins.push("JOIN Designs ON Games.GameID = Designs.GameID");
+      conditions.push(
+        `Designs.DesignerID IN (${resolvedOptions.designer.join(", ")})`
+      );
+    }
+
+    if (options.userId) {
+      params.push(options.userId);
+    }
+    if (options.rating) {
+      conditions.push("Games.Rating >= ?");
+      params.push(options.rating);
+    }
+    if (options.complexity) {
+      conditions.push("Games.Complexity >= ?");
+      params.push(options.complexity);
+    }
+
+    if (options.minPlayer) {
+      conditions.push("Games.MinPlayer >= ?");
+      params.push(options.minPlayer);
+    }
+
+    if (options.maxPlayer) {
+      conditions.push("Games.MaxPlayer <= ?");
+      params.push(options.maxPlayer);
+    }
+
+    if (options.minTime) {
+      conditions.push("Games.MinTime >= ?");
+      params.push(options.minTime);
+    }
+
+    if (options.maxTime) {
+      conditions.push("Games.MaxTime <= ?");
+      params.push(options.maxTime);
+    }
+
+    let query =
+      baseQuery +
+      joins.join(" ") +
+      (conditions.length ? " WHERE " + conditions.join(" AND ") : "") +
+      " GROUP BY Games.GameID";
     connection.query(query, params, (error, results) => {
       if (error) {
         console.error(error);
@@ -250,49 +363,67 @@ function loginUser(email, password, callback) {
   });
 }
 
+function saveGame(userId, gameId, callback) {
+  const query = "INSERT INTO FavoriteGames (UserID, GameID) VALUES (?, ?)";
+  connection.query(query, [userId, gameId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return callback(err);
+    }
+    callback(null, results);
+  });
+}
+
 function disconnect() {
   connection.end();
 }
 
-export { connection, connect, queryGames, registerUser, loginUser, disconnect };
+export {
+  connection,
+  connect,
+  queryGames,
+  queryUserGames,
+  registerUser,
+  loginUser,
+  saveGame,
+  disconnect,
+};
 
 //For testing:
 // connect();
+
+// const testUserId = 6;
+// const testGameId = 121;
+
+// // Test function for saveGame
+// function testSaveGame() {
+//   saveGame(testUserId, testGameId, (err, results) => {
+//     if (err) {
+//       console.error("Error saving game:", err);
+//       disconnect(); // Disconnect from the database after the test
+//       return;
+//     }
+
+//     console.log("Game saved successfully", results);
+//     disconnect();
+//   });
+// }
+
+// testSaveGame();
+
+// connect();
 // const searchOptions = {
-//   rating: 9.0,
-//   complexity: 3.0,
+//   userId: 6,
+//   onlySaved: true,
+//   rating: 1,
+//   complexity: 1,
 // };
 
-// queryGames(searchOptions, (results) => {
+// queryUserGames(searchOptions, (results) => {
 //   console.log("Test Results for queryGames:");
 //   console.log(results);
 //   disconnect();
 // });
-
-// async function testRegisterUser() {
-//   connect();
-
-//   try {
-//     const username = "JerryLi";
-//     const email = "mili@davidson.edu";
-//     const password = "lmy20030620";
-//     const hashedPassword = await bcrypt.hash(password, 10);
-
-//     registerUser(username, email, hashedPassword, (err, results) => {
-//       if (err) {
-//         console.error("Registration error:", err);
-//       } else {
-//         console.log("Registration successful:", results);
-//       }
-//       disconnect();
-//     });
-//   } catch (error) {
-//     console.error("Error hashing password:", error);
-//     disconnect();
-//   }
-// }
-
-// testRegisterUser();
 
 // async function testLogin() {
 //   connect();

@@ -13,6 +13,8 @@ DROP TABLE IF EXISTS Designs;
 DROP TABLE IF EXISTS Catagorizes;
 DROP TABLE IF EXISTS HaveMechanic;
 DROP TABLE IF EXISTS Publishes;
+DROP TABLE IF EXISTS Users;
+DROP TABLE IF EXISTS FavoriteGames;
 
 CREATE TABLE Games(
     GameID INT,
@@ -21,10 +23,10 @@ CREATE TABLE Games(
     Rating FLOAT NULL,
     Complexity FLOAT NULL,
     YearPub VARCHAR(10),
-    MinPlayer INT NULL, 
-    MaxPlayer INT NULL, 
-    MinTime INT NULL, 
-    MaxTime INT NULL, 
+    MinPlayer INT NULL,
+    MaxPlayer INT NULL,
+    MinTime INT NULL,
+    MaxTime INT NULL,
     PRIMARY KEY (GameID)
 );
 
@@ -45,57 +47,57 @@ CREATE TABLE Designers(
 CREATE TABLE Artists(
     ArtistID INT,
     ArtistName VARCHAR(200),
-    PRIMARY KEY (ArtistID)    
+    PRIMARY KEY (ArtistID)
 );
 
 CREATE TABLE Categories(
-    CategoryID INT, 
+    CategoryID INT,
     CategoryName VARCHAR(200),
     PRIMARY KEY (CategoryID)
 );
 
 CREATE TABLE Mechanics(
-    MechanicID INT, 
+    MechanicID INT,
     MechanicName VARCHAR(200),
     PRIMARY KEY (MechanicID)
 );
 
 CREATE TABLE Publishers(
-    PublisherID INT, 
+    PublisherID INT,
     PublisherName VARCHAR(200),
     PRIMARY KEY (PublisherID)
 );
 
 CREATE TABLE Paints(
-    ArtistID INT, 
+    ArtistID INT,
     GameID INT,
     FOREIGN KEY (ArtistID) REFERENCES Artists(ArtistID) ON DELETE CASCADE,
     FOREIGN KEY (GameID) REFERENCES Games(GameID) ON DELETE CASCADE
 );
 
 CREATE TABLE Designs(
-    DesignerID INT, 
+    DesignerID INT,
     GameID INT,
     FOREIGN KEY (DesignerID) REFERENCES Designers(DesignerID) ON DELETE CASCADE,
     FOREIGN KEY (GameID) REFERENCES Games(GameID) ON DELETE CASCADE
 );
 
 CREATE TABLE Categorizes (
-    CategoryID INT, 
+    CategoryID INT,
     GameID INT,
     FOREIGN KEY (CategoryID) REFERENCES Categories(CategoryID) ON DELETE CASCADE,
     FOREIGN KEY (GameID) REFERENCES Games(GameID) ON DELETE CASCADE
 );
 
 CREATE TABLE HaveMechanic (
-    MechanicID INT, 
+    MechanicID INT,
     GameID INT,
     FOREIGN KEY (MechanicID) REFERENCES Mechanics(MechanicID) ON DELETE CASCADE,
     FOREIGN KEY (GameID) REFERENCES Games(GameID) ON DELETE CASCADE
 );
 
 CREATE TABLE Publishes (
-    PublisherID INT, 
+    PublisherID INT,
     GameID INT,
     FOREIGN KEY (PublisherID) REFERENCES Publishers(PublisherID) ON DELETE CASCADE,
     FOREIGN KEY (GameID) REFERENCES Games(GameID) ON DELETE CASCADE

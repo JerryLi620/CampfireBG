@@ -16,9 +16,11 @@ document
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
+          window.userId = data.userId;
           // Hide login button and show greeting
           document.getElementById("loginButton").style.display = "none";
           document.getElementById("greeting").style.display = "inline";
+          document.getElementById("savedGame").style.display = "inline";
           document.getElementById("username").textContent = data.username; // Set the username
           // Close the modal if it's open
           if ($("#loginModal").length) {
