@@ -19,7 +19,7 @@ document
           console.log("success");
           // Hide login button and show greeting
           document.getElementById("loginButton").style.display = "none";
-          document.getElementById("greeting").style.display = "block";
+          document.getElementById("greeting").style.display = "inline";
           document.getElementById("username").textContent = data.username; // Set the username
           // Close the modal if it's open
           if ($("#loginModal").length) {
@@ -30,7 +30,7 @@ document
         }
       })
       .catch((error) => {
-        console.error("Login failed:", error);
+        console.error("Login failed at frontend");
         alert("Login failed: " + error.message);
       });
   });

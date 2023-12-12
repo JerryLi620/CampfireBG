@@ -225,38 +225,30 @@ function registerUser(username, email, hashedPassword, callback) {
 }
 
 function loginUser(email, password, callback) {
-  // This query is used to get the user by email
   const query = "SELECT * FROM Users WHERE Email = ?";
 
   connection.query(query, [email], (err, users) => {
-    // If there's an error executing the query, return the error to the callback
     if (err) {
       return callback(err);
     }
 
-    // If no users are found with that email, return an error
     if (users.length === 0) {
       return callback(new Error("No user with that email address."));
     }
 
-    // If a user is found, we check the provided password against the stored hash
     const user = users[0];
     bcrypt.compare(password, user.UserPassword, (err, isMatch) => {
       if (err) {
         return callback(err);
       }
-      console.log(isMatch);
-      // If the password matches, return null for the error and the user object
       if (isMatch) {
-        return callback(null, user);
+        return callback(null, user); // No error, user object as the second argument
       } else {
-        // If the password doesn't match, return an error
         return callback(new Error("Password incorrect."));
       }
     });
   });
 }
-
 
 function disconnect() {
   connection.end();

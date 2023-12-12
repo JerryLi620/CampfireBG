@@ -3,7 +3,7 @@
 // You have to do an 'npm install express' to get the package
 // Documentation in: https://expressjs.com/en/starter/hello-world.html
 import express from "express";
-import bcrypt from "bcrypt";
+import bcryptjs from "bcryptjs";
 import bodyParser from "body-parser";
 import * as db from "./db.mjs";
 
@@ -13,6 +13,7 @@ let port = 3001;
 db.connect();
 app.use(express.static("."));
 app.use(bodyParser.json());
+console.log("here1");
 
 app.get("/games", function (request, response) {
   db.queryGames(request.query, (results) => {
@@ -27,7 +28,7 @@ app.post("/register", async (req, res) => {
       return res.status(400).send("Username, email, and password are required");
     }
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcryptjs.hash(password, 10);
 
     db.registerUser(username, email, hashedPassword, (err, results) => {
       if (err) {
@@ -45,31 +46,21 @@ app.post("/register", async (req, res) => {
 app.post("/login", async (req, res) => {
   try {
     const { email, password } = req.body;
-    console.log(req.body);
+
     if (!email || !password) {
       return res
         .status(400)
         .json({ message: "Email and password are required" });
     }
 
-    db.loginUser(email, password, async (err, user) => {
-      console.log("login");
+    db.loginUser(email, password, (err, user) => {
       if (err) {
         console.error(err);
-        return res.status(500).json({ message: "Error on login" });
+        return res.status(401).json({ message: err.message });
       }
 
-      if (!user) {
-        return res.status(401).json({ message: "User not found" });
-      }
-
-      const isMatch = await bcrypt.compare(password, user.hashedPassword);
-      console.log("match");
-      if (isMatch) {
-        res.status(200).json({ success: true, username: user.Username });
-      } else {
-        res.status(401).json({ message: "Password is incorrect" });
-      }
+      // Login successful
+      res.status(200).json({ success: true, username: user.Username });
     });
   } catch (error) {
     console.error(error);
