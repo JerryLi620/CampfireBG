@@ -11,7 +11,6 @@ var app = express();
 let port = 3001;
 
 db.connect();
-
 app.use(express.static("."));
 app.use(bodyParser.json());
 
@@ -40,6 +39,41 @@ app.post("/register", async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).send("Server error");
+  }
+});
+
+app.post("/login", async (req, res) => {
+  try {
+    const { email, password } = req.body;
+    console.log(req.body);
+    if (!email || !password) {
+      return res
+        .status(400)
+        .json({ message: "Email and password are required" });
+    }
+
+    db.loginUser(email, password, async (err, user) => {
+      console.log("login");
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ message: "Error on login" });
+      }
+
+      if (!user) {
+        return res.status(401).json({ message: "User not found" });
+      }
+
+      const isMatch = await bcrypt.compare(password, user.hashedPassword);
+      console.log("match");
+      if (isMatch) {
+        res.status(200).json({ success: true, username: user.Username });
+      } else {
+        res.status(401).json({ message: "Password is incorrect" });
+      }
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Server error" });
   }
 });
 

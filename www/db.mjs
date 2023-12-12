@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 var connection = createConnection({
   host: "127.0.0.1",
   user: "root",
-  password: "",
+  password: "lmy20030620",
   database: "BoardgameData",
 });
 
@@ -224,11 +224,45 @@ function registerUser(username, email, hashedPassword, callback) {
   });
 }
 
+function loginUser(email, password, callback) {
+  // This query is used to get the user by email
+  const query = "SELECT * FROM Users WHERE Email = ?";
+
+  connection.query(query, [email], (err, users) => {
+    // If there's an error executing the query, return the error to the callback
+    if (err) {
+      return callback(err);
+    }
+
+    // If no users are found with that email, return an error
+    if (users.length === 0) {
+      return callback(new Error("No user with that email address."));
+    }
+
+    // If a user is found, we check the provided password against the stored hash
+    const user = users[0];
+    bcrypt.compare(password, user.UserPassword, (err, isMatch) => {
+      if (err) {
+        return callback(err);
+      }
+      console.log(isMatch);
+      // If the password matches, return null for the error and the user object
+      if (isMatch) {
+        return callback(null, user);
+      } else {
+        // If the password doesn't match, return an error
+        return callback(new Error("Password incorrect."));
+      }
+    });
+  });
+}
+
+
 function disconnect() {
   connection.end();
 }
 
-export { connection, connect, queryGames, registerUser, disconnect };
+export { connection, connect, queryGames, registerUser, loginUser, disconnect };
 
 //For testing:
 // connect();
@@ -248,9 +282,9 @@ export { connection, connect, queryGames, registerUser, disconnect };
 //   connect();
 
 //   try {
-//     const username = "Jerry";
-//     const email = "lmyjerry@gmail.com";
-//     const password = "12345678";
+//     const username = "JerryLi";
+//     const email = "mili@davidson.edu";
+//     const password = "lmy20030620";
 //     const hashedPassword = await bcrypt.hash(password, 10);
 
 //     registerUser(username, email, hashedPassword, (err, results) => {
@@ -268,3 +302,26 @@ export { connection, connect, queryGames, registerUser, disconnect };
 // }
 
 // testRegisterUser();
+
+// async function testLogin() {
+//   connect();
+
+//   try {
+//     const email = "mili@davidson.edu";
+//     const password = "lmy20030620";
+
+//     loginUser(email, password, (err, results) => {
+//       if (err) {
+//         console.error("Login error:", err);
+//       } else {
+//         console.log("Login successful:", results);
+//       }
+//       disconnect();
+//     });
+//   } catch (error) {
+//     console.error("Error", error);
+//     disconnect();
+//   }
+// }
+
+// testLogin();
