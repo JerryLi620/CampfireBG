@@ -25,6 +25,7 @@
 
     .col-md{
       margin-right: 10px;
+      font-family: serif;
     }
 
     #results {
@@ -48,15 +49,16 @@
     border-color: #8F8389; 
     color: #E6EFE9; 
     margin-right:10px;
+    font-family: fantasy;
   }
 
  
   </style>
-  <title>Board Game Search</title>
+  <title>CampfireBG</title>
 </head>
 <body>
 <nav class="navbar" style="background-color: #8F8389;">
-  <a class="navbar-brand" href="#" style="color: #E6EFE9; font-weight: bold;">
+  <a class="navbar-brand" href="#" style="color: #E6EFE9; font-weight: bold; font-family: fantasy; font-size: x-large;">
     <img
       src="logo/Campfire.png"
       width="50"
@@ -64,7 +66,7 @@
       class="d-inline-block align-mid"
       alt=""
     />
-    Board Game Search
+    CampfireBG
   </a>
       <div class="ms-auto">
         <div id="loginSection">
@@ -78,7 +80,7 @@
           </button>
 
           <!-- Greeting, initially hidden -->
-          <div id="greeting" style="display: none">
+          <div id="greeting" style="display: none; font-family: fantasy">
             Hello, <span id="username"></span>
           </div>
 
@@ -105,7 +107,7 @@
           placeholder="Game Name"
           name="gameName"
         />
-        <label for="gameName">Game Name</label>
+        <label for="gameName" style = "font-weight:bold">Game Name</label>
       </div>
     </div>
 
@@ -118,7 +120,7 @@
           placeholder="Designer Name"
           name="designerName"
         />
-        <label for="designerName">Designer Name</label>
+        <label for="designerName" style = "font-weight:bold">Designer Name</label>
       </div>
     </div>
 
@@ -131,7 +133,7 @@
           placeholder="Artist Name"
           name="artistName"
         />
-        <label for="artistName">Artist Name</label>
+        <label for="artistName" style = "font-weight:bold">Artist Name</label>
       </div>
     </div>
 
@@ -144,14 +146,14 @@
           placeholder="Publisher Name"
           name="publisherName"
         />
-        <label for="publisherName">Publisher Name</label>
+        <label for="publisherName" style = "font-weight:bold">Publisher Name</label>
       </div>
     </div>
 
     <!-- Slider input portion -->
     <div class="row g-2">
       <div class="col-md">
-        <label for="numPlayers">Number of Players</label>
+        <label for="numPlayers" style = "font-weight:bold">Number of Players</label>
         <div id="numPlayers"></div>
         <div class="row">
           <div class="col-md">
@@ -167,7 +169,7 @@
       </div>
 
       <div class="col-md">
-        <label for="playTime">Playing Time</label>
+        <label for="playTime" style = "font-weight:bold">Playing Time</label>
         <div id="playTime"></div>
         <div class="row">
           <div class="col-md">
@@ -183,7 +185,7 @@
       </div>
 
       <div class="col-md" >
-        <label for="complexity" class="form-label">Complexity (Max 5)</label>
+        <label for="complexity" class="form-label" style = "font-weight:bold">Complexity (Max 5)</label>
         <input
           type="range"
           class="form-range"
@@ -193,11 +195,11 @@
           max="5"
           oninput="this.nextElementSibling.innerText = this.value"
         />
-        <output></output>
+        <output>3</output>
       </div>
 
       <div class="col-md">
-        <label for="rating" class="form-label">Rating (Max 10)</label>
+        <label for="rating" class="form-label" style = "font-weight:bold">Rating (Max 10)</label>
         <input
           type="range"
           class="form-range"
@@ -207,7 +209,7 @@
           max="10"
           oninput="this.nextElementSibling.innerText = this.value"
         />
-        <output></output>
+        <output>5</output>
       </div>
     </div>
 
