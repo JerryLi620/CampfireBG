@@ -260,8 +260,7 @@ export { connection, connect, queryGames, registerUser, loginUser, disconnect };
 // connect();
 // const searchOptions = {
 //   rating: 9.0,
-//   minPlayer: 1,
-//   maxTime: 20,
+//   complexity: 3.0,
 // };
 
 // queryGames(searchOptions, (results) => {

@@ -25,7 +25,10 @@ app.post("/register", async (req, res) => {
   try {
     const { username, email, password } = req.body;
     if (!username || !email || !password) {
-      return res.status(400).send("Username, email, and password are required");
+      return res.status(400).json({
+        success: true,
+        message: "Username, email, and password are required",
+      });
     }
 
     const hashedPassword = await bcryptjs.hash(password, 10);
@@ -33,9 +36,14 @@ app.post("/register", async (req, res) => {
     db.registerUser(username, email, hashedPassword, (err, results) => {
       if (err) {
         console.error(err);
-        return res.status(500).send("Error registering new user");
+        return res.status(500).json({
+          success: true,
+          message: "Error registering new user",
+        });
       }
-      res.status(201).send("User registered successfully");
+      res
+        .status(200)
+        .json({ success: true, message: "User registered successfully" });
     });
   } catch (error) {
     console.error(error);

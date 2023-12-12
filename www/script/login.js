@@ -16,7 +16,6 @@ document
       .then((response) => response.json())
       .then((data) => {
         if (data.success) {
-          console.log("success");
           // Hide login button and show greeting
           document.getElementById("loginButton").style.display = "none";
           document.getElementById("greeting").style.display = "inline";

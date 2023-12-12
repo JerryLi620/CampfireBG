@@ -9,10 +9,12 @@ document
       designerName: document.getElementById("designerName").value,
       artistName: document.getElementById("artistName").value,
       publisherName: document.getElementById("publisherName").value,
-      minPlayer: document.getElementById("minPlayer").value,
-      maxPlayer: document.getElementById("maxPlayer").value,
+      minPlayer: document.getElementById("minPlayers").value,
+      maxPlayer: document.getElementById("maxPlayers").value,
       minTime: document.getElementById("minTime").value,
       maxTime: document.getElementById("maxTime").value,
+      complexity: document.getElementById("complexity").value,
+      rating: document.getElementById("rating").value,
     };
 
     fetch("/games?" + new URLSearchParams(formData))

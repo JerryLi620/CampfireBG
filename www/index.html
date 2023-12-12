@@ -1,61 +1,64 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
-  />
-  <link
-    rel="stylesheet"
-    href="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.css"
-  />
-  <style>
-    body {
-      margin-bottom: 20px; 
-    }
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.css"
+    />
+    <style>
+      body {
+        margin-bottom: 20px;
+      }
 
-    #searchForm {
-      margin-top: 20px; 
-    }
-    #results {
-      margin-bottom: 20px; 
-      margin-top: 20px;
-    }
+      #searchForm {
+        margin-top: 20px;
+      }
+      #results {
+        margin-bottom: 20px;
+        margin-top: 20px;
+      }
 
-    #slider-range {
-      margin-top: 10px;
-      font-size: 14px;
-    }
+      #slider-range {
+        margin-top: 10px;
+        font-size: 14px;
+      }
 
-    .btn-primary {
-    background-color: #A4AEA2; 
-    border-color: #8F8389; 
-    color: #E6EFE9; 
-  }
+      .btn-primary {
+        background-color: #a4aea2;
+        border-color: #8f8389;
+        color: #e6efe9;
+      }
 
- 
       #signup {
         margin-left: 10px;
         margin-right: 20px;
       }
-  </style>
-  <title>Board Game Search</title>
-</head>
-<body>
-<nav class="navbar" style="background-color: #8F8389;">
-  <a class="navbar-brand" href="#" style="color: #E6EFE9; font-weight: bold;">
-    <img
-      src="logo/Campfire.png"
-      width="50"
-      height="40"
-      class="d-inline-block align-mid"
-      alt=""
-    />
-    Board Game Search
-  </a>
+    </style>
+    <title>Board Game Search</title>
+  </head>
+  <body>
+    <nav class="navbar" style="background-color: #8f8389">
+      <a
+        class="navbar-brand"
+        href="#"
+        style="color: #e6efe9; font-weight: bold"
+      >
+        <img
+          src="logo/Campfire.png"
+          width="50"
+          height="40"
+          class="d-inline-block align-mid"
+          alt=""
+        />
+        Board Game Search
+      </a>
       <div class="ms-auto">
         <div id="loginSection">
           <button
@@ -73,209 +76,247 @@
             Hello, <span id="username"></span>
           </div>
 
-      <button
-        type="button"
+          <button
+            type="button"
             id="signup"
-        class="btn btn-primary"
-        data-bs-toggle="modal"
-        data-bs-target="#registrationModal"
-      >
-        Sign Up
-      </button>
+            class="btn btn-primary"
+            data-bs-toggle="modal"
+            data-bs-target="#registrationModal"
+          >
+            Sign Up
+          </button>
         </div>
       </div>
-</nav>
-<form id="searchForm" class="container">
-  <div class="row g-1">
-    <div class="col-md">
-      <div class="form-floating">
-        <input
-          type="text"
-          class="form-control"
-          id="gameName"
-          placeholder="Game Name"
-          name="gameName"
-        />
-        <label for="gameName">Game Name</label>
-      </div>
-    </div>
-
-    <div class="col-md">
-      <div class="form-floating">
-        <input
-          type="text"
-          class="form-control"
-          id="designerName"
-          placeholder="Designer Name"
-          name="designerName"
-        />
-        <label for="designerName">Designer Name</label>
-      </div>
-    </div>
-
-    <div class="col-md">
-      <div class="form-floating">
-        <input
-          type="text"
-          class="form-control"
-          id="artistName"
-          placeholder="Artist Name"
-          name="artistName"
-        />
-        <label for="artistName">Artist Name</label>
-      </div>
-    </div>
-
-    <div class="col-md">
-      <div class="form-floating">
-        <input
-          type="text"
-          class="form-control"
-          id="publisherName"
-          placeholder="Publisher Name"
-          name="publisherName"
-        />
-        <label for="publisherName">Publisher Name</label>
-      </div>
-    </div>
-
-    <!-- Slider input portion -->
-    <div class="row g-2">
-      <div class="col-md">
-        <label for="numPlayers">Number of Players</label>
-        <div id="numPlayers"></div>
-        <div class="row">
-          <div class="col-md">
-            <label for="minPlayers">Min:</label>
-            <input type="number" class="form-control" id="minPlayers" name="minPlayers" min="1" max="10" value="1">
-          </div>
-          <div class="col-md">
-            <label for="maxPlayers">Max:</label>
-            <input type="number" class="form-control" id="maxPlayers" name="maxPlayers" min="1" max="10" value="10">
-          </div>
-        </div>
-        <div id="slider-range"></div>
-      </div>
-
-      <div class="col-md">
-        <label for="playTime">Playing Time</label>
-        <div id="playTime"></div>
-        <div class="row">
-          <div class="col-md">
-            <label for="minTime">Min:</label>
-            <input type="number" class="form-control" id="minTime" name="minTime" min="0" max="120" value="0" step="10">
-          </div>
-          <div class="col-md">
-            <label for="maxTime">Max:</label>
-            <input type="number" class="form-control" id="maxTime" name="maxTime" min="0" max="120" value="120" step="10">
-          </div>
-        </div>
-        <div id="slider-range"></div>
-      </div>
-
-      <div class="col-md">
-        <label for="complexity" class="form-label">Complexity</label>
-        <input
-          type="range"
-          class="form-range"
-          id="complexity"
-          name="complexity"
-          min="1"
-          max="5"
-          oninput="this.nextElementSibling.innerText = this.value"
-        />
-        <output>2.5</output>
-      </div>
-
-      <div class="col-md">
-        <label for="rating" class="form-label">Rating</label>
-        <input
-          type="range"
-          class="form-range"
-          id="rating"
-          name="rating"
-          min="0"
-          max="10"
-          oninput="this.nextElementSibling.innerText = this.value"
-        />
-        <output>5</output>
-      </div>
-    </div>
-
-    <div class="row g-2">
-    <div class="row mt-2">
-      <div class="col-md">
-        <div class="form-check">
-          <input class="form-check-input" type="checkbox" id="savedGameCheck">
-          <label class="form-check-label" for="savedGameCheck">
-            My saved games
-          </label>
-        </div>
-      </div>
-    </div>
-    </div>
-    
-    <div class="row g-2">
-      <div class="col-md">
-        <button type="submit" class="btn btn-primary">Search</button>
-      </div>
-    </div>
-  </div>
-</form>
-
-<div id="results" class="container"></div>
-
-<!-- Registration modal -->
-<div
-  class="modal fade"
-  id="registrationModal"
-  tabindex="-1"
-  aria-labelledby="registrationModalLabel"
-  aria-hidden="true"
->
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="registrationModalLabel">
-          User Registration
-        </h5>
-        <button
-          type="button"
-          class="btn-close"
-          data-bs-dismiss="modal"
-          aria-label="Close"
-        ></button>
-      </div>
-      <div class="modal-body">
-        <form id="registrationForm">
-          <div class="mb-3">
-            <label for="username" class="form-label">Username</label>
+    </nav>
+    <form id="searchForm" class="container">
+      <div class="row g-1">
+        <div class="col-md">
+          <div class="form-floating">
             <input
               type="text"
               class="form-control"
-              id="username"
-              required
+              id="gameName"
+              placeholder="Game Name"
+              name="gameName"
             />
+            <label for="gameName">Game Name</label>
           </div>
-          <div class="mb-3">
-            <label for="email" class="form-label">Email</label>
-            <input type="email" class="form-control" id="email" required />
-          </div>
-          <div class="mb-3">
-            <label for="password" class="form-label">Password</label>
+        </div>
+
+        <div class="col-md">
+          <div class="form-floating">
             <input
-              type="password"
+              type="text"
               class="form-control"
-              id="password"
-              required
+              id="designerName"
+              placeholder="Designer Name"
+              name="designerName"
             />
+            <label for="designerName">Designer Name</label>
           </div>
-          <button type="submit" class="btn btn-primary">Register</button>
-        </form>
+        </div>
+
+        <div class="col-md">
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="artistName"
+              placeholder="Artist Name"
+              name="artistName"
+            />
+            <label for="artistName">Artist Name</label>
+          </div>
+        </div>
+
+        <div class="col-md">
+          <div class="form-floating">
+            <input
+              type="text"
+              class="form-control"
+              id="publisherName"
+              placeholder="Publisher Name"
+              name="publisherName"
+            />
+            <label for="publisherName">Publisher Name</label>
+          </div>
+        </div>
+
+        <!-- Slider input portion -->
+        <div class="row g-2">
+          <div class="col-md">
+            <label for="numPlayers">Number of Players</label>
+            <div id="numPlayers"></div>
+            <div class="row">
+              <div class="col-md">
+                <label for="minPlayers">Min:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="minPlayers"
+                  name="minPlayers"
+                  min="1"
+                  max="10"
+                  value="1"
+                />
+              </div>
+              <div class="col-md">
+                <label for="maxPlayers">Max:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="maxPlayers"
+                  name="maxPlayers"
+                  min="1"
+                  max="10"
+                  value="10"
+                />
+              </div>
+            </div>
+            <div id="slider-range"></div>
+          </div>
+
+          <div class="col-md">
+            <label for="playTime">Playing Time</label>
+            <div id="playTime"></div>
+            <div class="row">
+              <div class="col-md">
+                <label for="minTime">Min:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="minTime"
+                  name="minTime"
+                  min="0"
+                  max="120"
+                  value="0"
+                  step="10"
+                />
+              </div>
+              <div class="col-md">
+                <label for="maxTime">Max:</label>
+                <input
+                  type="number"
+                  class="form-control"
+                  id="maxTime"
+                  name="maxTime"
+                  min="0"
+                  max="120"
+                  value="120"
+                  step="10"
+                />
+              </div>
+            </div>
+            <div id="slider-range"></div>
+          </div>
+
+          <div class="col-md">
+            <label for="complexity" class="form-label">Complexity</label>
+            <input
+              type="range"
+              class="form-range"
+              id="complexity"
+              name="complexity"
+              min="1"
+              max="5"
+              oninput="this.nextElementSibling.innerText = this.value"
+            />
+            <output>3</output>
+          </div>
+
+          <div class="col-md">
+            <label for="rating" class="form-label">Rating</label>
+            <input
+              type="range"
+              class="form-range"
+              id="rating"
+              name="rating"
+              min="0"
+              max="10"
+              oninput="this.nextElementSibling.innerText = this.value"
+            />
+            <output>5</output>
+          </div>
+        </div>
+
+        <div class="row g-2">
+          <div class="row mt-2">
+            <div class="col-md">
+              <div class="form-check">
+                <input
+                  class="form-check-input"
+                  type="checkbox"
+                  id="savedGameCheck"
+                />
+                <label class="form-check-label" for="savedGameCheck">
+                  My saved games
+                </label>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row g-2">
+          <div class="col-md">
+            <button type="submit" class="btn btn-primary">Search</button>
+          </div>
+        </div>
+      </div>
+    </form>
+
+    <div id="results" class="container"></div>
+
+    <!-- Registration modal -->
+    <div
+      class="modal fade"
+      id="registrationModal"
+      tabindex="-1"
+      aria-labelledby="registrationModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="registrationModalLabel">
+              User Registration
+            </h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form id="registrationForm">
+              <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="registername"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="email" class="form-label">Email</label>
+                <input type="email" class="form-control" id="email" required />
+              </div>
+              <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input
+                  type="password"
+                  class="form-control"
+                  id="password"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-primary">Register</button>
+            </form>
+          </div>
+        </div>
       </div>
     </div>
-  </div>
-</div>
 
     <!-- Login Modal -->
     <div
@@ -326,11 +367,11 @@
       </div>
     </div>
 
-<script src="script/script.js"></script>
-<script src="script/register.js"></script>
+    <script src="script/script.js"></script>
+    <script src="script/register.js"></script>
     <script src="script/login.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.js"></script>
-</body>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.10.2/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nouislider@14.6.3/distribute/nouislider.min.js"></script>
+  </body>
 </html>
