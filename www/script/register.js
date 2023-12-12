@@ -15,11 +15,9 @@ document
     })
       .then((response) => response.json())
       .then((data) => {
-        console.log(data);
         if (data.success) {
           alert(data.message);
         } else {
-          console.log(data.message);
           alert(data.message);
         }
         if ($("#registrationModal").length) {

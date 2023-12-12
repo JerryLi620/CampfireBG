@@ -91,9 +91,15 @@ function displayResults(data) {
           key !== "MaxTime"
         ) {
           var cell = document.createElement("td");
-
-          // Check if the property is 'Categories' or 'Mechanics' or any other that needs line breaks
-          if (key === "Categories" || key === "Mechanics") {
+          if (key === "GameName") {
+            // Create a hyperlink for the game name
+            var link = document.createElement("a");
+            link.href =
+              "https://www.amazon.com/s?k=" + result[key] + " boardgame";
+            link.textContent = result[key];
+            link.target = "_blank"; // Open in a new tab
+            cell.appendChild(link);
+          } else if (key === "Categories" || key === "Mechanics") {
             // Replace commas with line break tags
             cell.innerHTML =
               result[key] !== null ? result[key].replace(/,/g, ",<br>") : "N/A";

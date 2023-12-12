@@ -13,7 +13,6 @@ let port = 3001;
 db.connect();
 app.use(express.static("."));
 app.use(bodyParser.json());
-console.log("here1");
 
 app.get("/games", function (request, response) {
   db.queryGames(request.query, (results) => {
