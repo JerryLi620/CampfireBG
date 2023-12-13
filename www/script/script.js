@@ -65,7 +65,8 @@ function displayResults(data) {
         key !== "MinPlayer" &&
         key !== "MaxPlayer" &&
         key !== "MinTime" &&
-        key !== "MaxTime"
+        key !== "MaxTime" &&
+        key !== "IsFavorite"
       ) {
         var headerCell = document.createElement("th");
         headerCell.scope = "col";
@@ -111,7 +112,8 @@ function displayResults(data) {
           key !== "MinPlayer" &&
           key !== "MaxPlayer" &&
           key !== "MinTime" &&
-          key !== "MaxTime"
+          key !== "MaxTime" &&
+          key !== "IsFavorite"
         ) {
           var cell = document.createElement("td");
           if (key === "GameName") {
@@ -164,7 +166,7 @@ function displayResults(data) {
         starButton.appendChild(starIcon);
 
         starButton.onclick = function () {
-          toggleStar(starIcon, result.GameID);
+          toggleStar(starIcon, result.GameID, window.userId);
         };
 
         savedCell.appendChild(starButton);
@@ -182,17 +184,63 @@ function displayResults(data) {
   }
 }
 
-function toggleStar(starIcon, gameId) {
-  // Toggle star appearance and log the action
+function toggleStar(starIcon, gameId, userId) {
   if (starIcon.classList.contains("far")) {
+    // If the star is not filled, fill it and save the game
     starIcon.classList.remove("far");
     starIcon.classList.add("fas");
-    // Placeholder for future functionality to save the game
+
+    fetch("/saveGame", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, gameId }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.text();
+      })
+      .then((data) => {
+        alert("Game saved successfully!");
+      })
+      .catch((error) => {
+        console.error("Error saving game:", error);
+        alert("Error occurred while saving the game.");
+        starIcon.classList.remove("fas");
+        starIcon.classList.add("far");
+      });
+
     console.log("Game saved, Game ID:", gameId);
   } else {
     starIcon.classList.remove("fas");
     starIcon.classList.add("far");
-    // Placeholder for future functionality to unsave the game
+
+    fetch("/unsaveGame", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ userId, gameId }),
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.text();
+      })
+      .then((data) => {
+        alert("Game unsaved successfully!");
+      })
+      .catch((error) => {
+        console.error("Error saving game:", error);
+        alert("Error occurred while saving the game.");
+        starIcon.classList.remove("far");
+        starIcon.classList.add("fas");
+      });
+
     console.log("Game unsaved, Game ID:", gameId);
   }
 }

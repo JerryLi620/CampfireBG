@@ -374,6 +374,17 @@ function saveGame(userId, gameId, callback) {
   });
 }
 
+function unsaveGame(userId, gameId, callback) {
+  const query = "DELETE FROM FavoriteGames WHERE UserID = ? AND GameID = ?";
+  connection.query(query, [userId, gameId], (err, results) => {
+    if (err) {
+      console.error(err);
+      return callback(err);
+    }
+    callback(null, results);
+  });
+}
+
 function disconnect() {
   connection.end();
 }
@@ -386,6 +397,7 @@ export {
   registerUser,
   loginUser,
   saveGame,
+  unsaveGame,
   disconnect,
 };
 

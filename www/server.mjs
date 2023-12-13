@@ -84,6 +84,7 @@ app.post("/saveGame", async (req, res) => {
       if (err) {
         return res.status(500).send("Error saving game");
       }
+
       res.status(201).send("Game saved successfully");
     });
   } catch (error) {
@@ -92,10 +93,25 @@ app.post("/saveGame", async (req, res) => {
   }
 });
 
+app.post("/unsaveGame", async (req, res) => {
+  const { userId, gameId } = req.body;
+
+  try {
+    db.unsaveGame(userId, gameId, (err, results) => {
+      if (err) {
+        return res.status(500).send("Error saving game");
+      }
+
+      res.status(201).send("Game unsaved successfully");
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(500).send("Server error");
+  }
+});
+
 app.get("/userGames", async (request, response) => {
-  console.log(request.query);
   db.queryUserGames(request.query, (results) => {
-    console.log(results);
     response.json(results);
   });
 });
