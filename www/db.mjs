@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 var connection = createConnection({
   host: "127.0.0.1",
   user: "root",
-  password: "lmy20030620",
+  password: "",
   database: "BoardgameData",
 });
 
