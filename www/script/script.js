@@ -11,7 +11,28 @@ document.addEventListener("DOMContentLoaded", function () {
     });
   }
 
+  function displayLoadingIndicator() {
+    var loadingContainer = document.createElement("div");
+    loadingContainer.classList.add("d-flex", "align-items-center", "mt-3"); 
+
+    var loadingText = document.createElement("strong");
+    loadingText.setAttribute("role", "status");
+    loadingText.textContent = "Moving BG to your camp...";
+
+    var spinner = document.createElement("div");
+    spinner.classList.add("spinner-border", "ms-auto");
+    spinner.setAttribute("aria-hidden", "true");
+
+    loadingContainer.appendChild(loadingText);
+    loadingContainer.appendChild(spinner);
+
+    var resultsContainer = document.getElementById("results");
+    resultsContainer.innerHTML = ""; // Clear existing content
+    resultsContainer.appendChild(loadingContainer);
+  }
+
   function performSearch(isMySavedGamesClicked = false) {
+    displayLoadingIndicator(); 
     const isLoggedIn =
       document.getElementById("loginButton").style.display === "none";
     var formData = {
@@ -46,7 +67,9 @@ function displayResults(data) {
   var resultsContainer = document.getElementById("results");
   resultsContainer.innerHTML = "";
   var tableWrapper = document.createElement("div");
+  tableWrapper.classList.add("table-wrapper");
   tableWrapper.classList.add("table-responsive");
+  
   if (data && data.length > 0) {
     var table = document.createElement("table");
     table.classList.add("table", "table-hover");

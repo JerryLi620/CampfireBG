@@ -6,8 +6,8 @@
   "configurations": [
     {
       "name": "Backend - Server",
-      "program": "www/server.mjs",
-      "cwd": "${workspaceFolder}",
+      "program": "server.mjs",
+      "cwd": "${workspaceFolder}/www",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
       "type": "node"

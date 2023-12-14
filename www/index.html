@@ -33,9 +33,18 @@
         font-family: serif;
       }
 
+      .table-wrapper {
+        max-height: 500px;
+        overflow-y: auto;
+      }
+
       #results {
-        margin-bottom: 20px;
+        /* margin-bottom: 20px; */
         margin-top: 20px;
+        font-family:  monospace;
+        font-size: medium;
+        border-top: 2px solid #8f8389;
+        padding-top: 10px;
       }
 
       #slider-range {
@@ -55,6 +64,8 @@
         color: #e6efe9;
         margin-right: 10px;
         font-family: fantasy;
+        font-weight: bold;
+        font-size: large;
       }
     </style>
     <title>CampfireBG</title>
@@ -93,8 +104,8 @@
           </button>
 
           <!-- Greeting, initially hidden -->
-          <div id="greeting" style="display: none; font-family: fantasy">
-            Hello, <span id="username"></span>
+          <div id="greeting" style="display: none; color: #e6efe9; font-family: fantasy;">
+            Hello, <span id="username"></span> (◕‿◕)
           </div>
           <div id="userId" style="display: none"></div>
 
@@ -253,7 +264,7 @@
               max="5"
               oninput="this.nextElementSibling.innerText = this.value"
             />
-            <output>3</output>
+            <output>3 and above</output>
           </div>
 
           <div class="col-md">
@@ -269,7 +280,7 @@
               max="10"
               oninput="this.nextElementSibling.innerText = this.value"
             />
-            <output>5</output>
+            <output>5 and above</output>
           </div>
         </div>
 
