@@ -1,7 +1,4 @@
-// This is a framework to handle server-side content
-
 // You have to do an 'npm install express' to get the package
-// Documentation in: https://expressjs.com/en/starter/hello-world.html
 import express from "express";
 import bcryptjs from "bcryptjs";
 import bodyParser from "body-parser";

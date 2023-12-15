@@ -1,13 +1,11 @@
 document.addEventListener("DOMContentLoaded", function () {
-  // Get the checkbox element
   var savedGameCheck = document.getElementById("savedGameCheck");
 
-  // Add the event listener to the search form
   var searchForm = document.getElementById("searchForm");
   if (searchForm) {
     searchForm.addEventListener("submit", function (event) {
       event.preventDefault();
-      performSearch(savedGameCheck.checked); // Perform search based on checkbox state
+      performSearch(savedGameCheck.checked); 
     });
   }
 
@@ -27,7 +25,7 @@ document.addEventListener("DOMContentLoaded", function () {
     loadingContainer.appendChild(spinner);
 
     var resultsContainer = document.getElementById("results");
-    resultsContainer.innerHTML = ""; // Clear existing content
+    resultsContainer.innerHTML = ""; 
     resultsContainer.appendChild(loadingContainer);
   }
 
@@ -140,15 +138,13 @@ function displayResults(data) {
         ) {
           var cell = document.createElement("td");
           if (key === "GameName") {
-            // Create a hyperlink for the game name
             var link = document.createElement("a");
             link.href =
               "https://www.amazon.com/s?k=" + result[key] + " boardgame";
             link.textContent = result[key];
-            link.target = "_blank"; // Open in a new tab
+            link.target = "_blank"; 
             cell.appendChild(link);
           } else if (key === "Categories" || key === "Mechanics") {
-            // Replace commas with line break tags
             cell.innerHTML =
               result[key] !== null ? result[key].replace(/,/g, ",<br>") : "N/A";
           } else if (key === "Rating") {
@@ -209,7 +205,6 @@ function displayResults(data) {
 
 function toggleStar(starIcon, gameId, userId) {
   if (starIcon.classList.contains("far")) {
-    // If the star is not filled, fill it and save the game
     starIcon.classList.remove("far");
     starIcon.classList.add("fas");
 

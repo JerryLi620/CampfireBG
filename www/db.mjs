@@ -61,7 +61,7 @@ function getPublisherIdByName(name, callback) {
 }
 
 function resolveNamesToIds(options, callback) {
-  let tasks = 0; // To keep track of asynchronous tasks
+  let tasks = 0; 
 
   function decrementTasksAndCallCallback() {
     tasks--;
@@ -106,14 +106,12 @@ function resolveNamesToIds(options, callback) {
     });
   }
 
-  // If no asynchronous tasks were added, immediately call the callback
   if (tasks === 0) {
     callback(options);
   }
 }
 
 function queryGames(options, callback) {
-  // Initialize the base query and join clauses
   let baseQuery = `
     SELECT 
       Games.GameID, 
@@ -138,12 +136,10 @@ function queryGames(options, callback) {
     "LEFT JOIN Mechanics ON HaveMechanic.MechanicID = Mechanics.MechanicID",
   ];
 
-  // Resolve names to IDs
   resolveNamesToIds(options, (resolvedOptions) => {
     let conditions = [];
     let params = [];
 
-    // Add conditions for resolvedOptions
     if (resolvedOptions.game && resolvedOptions.game.length > 0) {
       conditions.push(`Games.GameID IN (${resolvedOptions.game.join(", ")})`);
     }
@@ -169,7 +165,6 @@ function queryGames(options, callback) {
       );
     }
 
-    // Add conditions for rating and complexity
     if (options.rating) {
       conditions.push("Games.Rating >= ?");
       params.push(options.rating);
@@ -199,7 +194,6 @@ function queryGames(options, callback) {
       params.push(options.maxTime);
     }
 
-    // Construct the final query
     let query =
       baseQuery +
       joins.join(" ") +
@@ -355,7 +349,7 @@ function loginUser(email, password, callback) {
         return callback(err);
       }
       if (isMatch) {
-        return callback(null, user); // No error, user object as the second argument
+        return callback(null, user); 
       } else {
         return callback(new Error("Password incorrect."));
       }
