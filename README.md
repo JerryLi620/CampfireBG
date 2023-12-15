@@ -2,6 +2,7 @@
 # CampfireBG
 
 Welcome to CampfireBG, a comprehensive database and application for board game enthusiasts. This project is designed to provide a rich collection of board game data, including details about games, designers, artists, categories, mechanics, publishers, and user preferences.
+
 <img width="1512" alt="截屏2023-12-14 下午11 08 30" src="https://github.com/JerryLi620/CampfireBG/assets/90734286/5555937f-8ddf-41a6-8fc4-8bf2e3300250">
 
 # Getting Started
