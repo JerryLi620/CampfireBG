@@ -250,8 +250,8 @@
                   id="maxTime"
                   name="maxTime"
                   min="0"
-                  max="120"
-                  placeholder="120"
+                  max="1000000"
+                  placeholder="720+"
                   step="10"
                 />
               </div>
@@ -261,7 +261,7 @@
 
           <div class="col-md">
             <label for="complexity" class="form-label" style="font-weight: bold"
-              >Complexity (Max 5)</label
+              >Lowest Complexity (Max 5)</label
             >
             <input
               type="range"
@@ -272,12 +272,12 @@
               max="5"
               oninput="this.nextElementSibling.innerText = this.value"
             />
-            <output>3 and above</output>
+            <output style="font-weight: bold">3</output>
           </div>
 
           <div class="col-md">
             <label for="rating" class="form-label" style="font-weight: bold"
-              >Rating (Max 10)</label
+              >Lowest Rating (Max 10)</label
             >
             <input
               type="range"
@@ -288,7 +288,7 @@
               max="10"
               oninput="this.nextElementSibling.innerText = this.value"
             />
-            <output>5 and above</output>
+            <output style="font-weight: bold">5</output>
           </div>
         </div>
 
